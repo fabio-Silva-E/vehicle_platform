@@ -1,0 +1,15 @@
+{% load static %}
+
+<div class="header-fixed d-flex align-items-center justify-content-between">
+
+    <img src="{% static 'images/header.png' %}" alt="Header" class="header-img">
+
+
+    <div class="header-actions">
+        <a href="{% url 'platform:car-create' %}" class="btn btn-primary">
+            Vender
+        </a>
+    </div>
+
+</div>
+

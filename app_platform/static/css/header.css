@@ -1,0 +1,33 @@
+/* HEADER FIXO */
+.header-fixed {
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 1050;
+
+    background: rgb(12, 40, 89);
+
+    padding: 10px 15px;
+
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+/* IMAGEM */
+.header-img {
+
+    max-height: 60px;
+
+    width: auto;
+}
+
+/* ÁREA DOS BOTÕES */
+.header-actions {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}

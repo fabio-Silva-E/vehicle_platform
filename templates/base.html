@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    {% load static %}
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/card.css' %}">
+    <link rel="stylesheet" href="{% static 'css/header.css' %}">
+    <link rel="stylesheet" href="{% static 'css/form.css' %}">
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+     <link rel="stylesheet" href="{% static 'css/payment.css' %}">
+</head>
+<body class="{% block body_class %}{% endblock %}">
+       <button id="toggleSidebar" class="toggle-btn">
+            ☰
+        </button>
+<div class="container-fluid">
+    <div class="d-flex" id="layout">
+
+        <!-- SIDEBAR -->
+        {% block sidebar %}
+        <div id="sidebar" class="sidebar">
+            {% include "includes/sidebar.html" with show_filters=show_filters %}
+        </div>
+        {% endblock %}
+
+        <!-- CONTEÚDO -->
+        <div id="content" class="content-area flex-grow-1">
+
+            {% block header %}
+                {% include "includes/header.html" %}
+            {% endblock %}
+
+            {% block search %}
+                {% include "includes/search_form.html" %}
+            {% endblock %}
+             
+            {% block content %}{% endblock %}
+
+            {% block pagination %}
+                {% include "includes/pagination.html" %}
+            {% endblock %}
+
+        </div>
+
+    </div>
+</div>
+
+<!-- 🔥 SCRIPT AQUI -->
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const toggleBtn = document.getElementById("toggleSidebar");
+
+    const sidebar = document.getElementById("sidebar");
+
+    toggleBtn.addEventListener("click", function () {
+
+        sidebar.classList.toggle("collapsed");
+
+    });
+
+});
+
+</script>
+{% include "includes/footer.html" %}
+</body>
+</html>

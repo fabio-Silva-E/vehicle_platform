@@ -1,0 +1,109 @@
+<div class="sidebar-container">
+
+
+    <!-- 👤 USUÁRIO -->
+    <div class="sidebar-user text-center">
+
+        {% if user.is_authenticated %}
+
+            <p class="mb-2">
+                <strong>{{ user.get_username }}</strong>
+            </p>
+
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+
+                <button class="btn btn-sm btn-outline-light w-100">
+                    Sair
+                </button>
+            </form>
+
+        {% else %}
+
+            <a href="{% url 'login'%}?next={{request.path}}"
+               class="btn btn-sm btn-light w-100">
+               Login
+            </a>
+
+        {% endif %}
+
+    </div>
+
+    <!-- 📌 MENU -->
+    <div class="sidebar-menu mt-4">
+
+        <a href="/" class="sidebar-link">
+            🏠 Início
+        </a>
+
+    </div>
+    <div class="sidebar-menu mt-4">
+    <a href="{% url 'platform:my-cars' %}"
+
+       class="sidebar-link">
+        📦 Meus anúncios
+
+    </a>
+    </div>
+    <!-- 🔍 FILTROS -->
+    {% if show_filters %}
+    <div class="sidebar-filter mt-4">
+
+        <form method="get"
+              action="{% url 'platform:car-list' %}">
+             <div class="mb-3">
+            <label>Categoria</label>
+            {{ search_form.category }}
+        </div>
+            <div class="mb-3">
+                <label>Modelo</label>
+                {{ search_form.model }}
+            </div>
+
+            <div class="mb-3">
+                <label>Fabricante</label>
+                {{ search_form.manufacturer }}
+            </div>
+
+            <div class="mb-3">
+                <label>Ano</label>
+                {{ search_form.year }}
+            </div>
+
+            <button class="btn btn-primary w-100">
+                Buscar
+            </button>
+
+        </form>
+
+    </div>
+    {% endif %}
+    <!-- 📢 ANÚNCIOS -->
+<div class="sidebar-ads mt-4">
+
+    <div class="ads-box">
+
+        <h5 class="ads-title">
+            📢 Anuncie Aqui
+        </h5>
+
+        <p class="ads-text">
+            Divulgue sua empresa, fazenda,
+            caminhões, máquinas ou serviços.
+        </p>
+
+        <a href="https://wa.me/5514997652839"
+           target="_blank"
+           class="btn btn-success w-100 mb-2">
+            💬 WhatsApp
+        </a>
+
+        <a href="mailto:fs27106@gmail.com"
+           class="btn btn-outline-light w-100">
+            ✉️ Email
+        </a>
+
+    </div>
+
+</div>
+</div>
