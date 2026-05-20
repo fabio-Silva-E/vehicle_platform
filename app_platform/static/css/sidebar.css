@@ -138,3 +138,63 @@ html, body {
 
     margin-bottom: 15px;
 }
+.sidebar-hint {
+
+    position: fixed;
+
+    top: 15px;
+
+    left: 60px;
+
+    background: #ffc107;
+
+    color: #000;
+
+    padding: 10px 15px;
+
+    border-radius: 12px;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+    z-index: 3000;
+
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+
+    animation: pulseHint 1.5s infinite;
+}
+
+/* SETA */
+.sidebar-hint::before {
+
+    content: "";
+
+    position: absolute;
+
+    left: -10px;
+
+    top: 15px;
+
+    border-width: 10px;
+
+    border-style: solid;
+
+    border-color: transparent #ffc107 transparent transparent;
+}
+
+/* ANIMAÇÃO */
+@keyframes pulseHint {
+
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}

@@ -2,14 +2,22 @@
 
 <div class="header-fixed d-flex align-items-center justify-content-between">
 
-    <img src="{% static 'images/header.png' %}" alt="Header" class="header-img">
+    <!-- LOGO -->
+    <img src="{% static 'images/header.png' %}"
+         alt="Header"
+         class="header-img">
 
+    <!-- MENSAGEM -->
+    <div class="header-message">
+        Os anuncios são de total respomsabilidade do vendedor este site liga vendedores a compradores
+    </div>
 
+    <!-- BOTÃO -->
     <div class="header-actions">
-        <a href="{% url 'platform:car-create' %}" class="btn btn-primary">
+        <a href="{% url 'platform:car-create' %}"
+           class="btn btn-primary">
             Vender
         </a>
     </div>
 
 </div>
-

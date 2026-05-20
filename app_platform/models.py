@@ -78,11 +78,29 @@ class Car(models.Model):
         if self.plan == "basico":
             return 4
 
-        if self.plan == "premium":
+        elif self.plan == "premium":
             return 15
 
-        if self.plan == "destaque":
+        elif self.plan == "destaque":
             return 30
+
+        return 4
+
+    def is_premium(self):
+        return self.plan == "premium"
+
+    def is_destaque(self):
+        return self.plan == "destaque"
+
+    def priority(self):
+
+        if self.plan == "destaque":
+            return 1
+
+        elif self.plan == "premium":
+            return 2
+
+        return 3
 
     def set_expiration(self):
         if self.plan == "basico":

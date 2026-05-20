@@ -1,6 +1,6 @@
 from django.contrib.auth import login
 from django.urls import reverse_lazy
-from django.db.models import Q
+from django.db.models import Q, Case, When, IntegerField, Value
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import UserRegisterForm, CarForm,  CarSearchForm
 from .models import Car, CarImage
@@ -32,7 +32,21 @@ class CarListView( generic.ListView):
         ).update(is_active=False)
         queryset = Car.objects.filter(
             is_active=True
-        ).select_related("manufacturer")
+        ).annotate(
+
+            plan_priority=Case(
+
+                When(plan="destaque", then=Value(1)),
+                When(plan="premium", then=Value(2)),
+                default=Value(3),
+
+                output_field=IntegerField()
+            )
+
+        ).order_by(
+            "plan_priority",
+            "-id"
+        )
 
         form = CarSearchForm(self.request.GET)
 
@@ -134,7 +148,7 @@ class CarDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Car
     template_name = "platform/car_confirm_delete.html"
     success_url = reverse_lazy("platform:my-cars")
-    
+
 class CarCreateView(LoginRequiredMixin, View):
 
     def get(self, request):

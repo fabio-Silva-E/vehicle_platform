@@ -20,14 +20,18 @@
 </head>
 <body class="{% block body_class %}{% endblock %}">
        <button id="toggleSidebar" class="toggle-btn">
-            ☰
-        </button>
+           ☰
+       </button>
+
+       <div id="sidebarHint" class="sidebar-hint">
+           👈 Clique aqui para expandir o menu
+       </div>
 <div class="container-fluid">
     <div class="d-flex" id="layout">
 
         <!-- SIDEBAR -->
         {% block sidebar %}
-        <div id="sidebar" class="sidebar">
+       <div id="sidebar" class="sidebar collapsed">
             {% include "includes/sidebar.html" with show_filters=show_filters %}
         </div>
         {% endblock %}
@@ -63,9 +67,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const sidebar = document.getElementById("sidebar");
 
+    const hint = document.getElementById("sidebarHint");
+
     toggleBtn.addEventListener("click", function () {
 
+        // abre / fecha menu
         sidebar.classList.toggle("collapsed");
+
+        // esconde balão
+        if (hint) {
+            hint.style.display = "none";
+        }
 
     });
 
