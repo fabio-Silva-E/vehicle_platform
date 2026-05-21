@@ -18,13 +18,14 @@
     <link rel="stylesheet" href="{% static 'css/register.css' %}">
      <link rel="stylesheet" href="{% static 'css/payment.css' %}">
 </head>
+
 <body class="{% block body_class %}{% endblock %}">
        <button id="toggleSidebar" class="toggle-btn">
            ☰
        </button>
 
        <div id="sidebarHint" class="sidebar-hint">
-           👈 Clique aqui para expandir o menu
+           👈 Clique aqui para expandir ou fechar o menu
        </div>
 <div class="container-fluid">
     <div class="d-flex" id="layout">
@@ -58,7 +59,6 @@
     </div>
 </div>
 
-<!-- 🔥 SCRIPT AQUI -->
 <script>
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -69,12 +69,33 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const hint = document.getElementById("sidebarHint");
 
+    // 🔥 recupera estado salvo
+    const sidebarOpen = localStorage.getItem("sidebarOpen");
+
+    if (sidebarOpen === "true") {
+
+        sidebar.classList.remove("collapsed");
+
+    } else {
+
+        sidebar.classList.add("collapsed");
+
+    }
+
     toggleBtn.addEventListener("click", function () {
 
-        // abre / fecha menu
+        // abre / fecha
         sidebar.classList.toggle("collapsed");
 
-        // esconde balão
+        // salva estado
+        const isCollapsed = sidebar.classList.contains("collapsed");
+
+        localStorage.setItem(
+            "sidebarOpen",
+            !isCollapsed
+        );
+
+        // esconde dica
         if (hint) {
             hint.style.display = "none";
         }

@@ -107,18 +107,21 @@
 </div>
 
 <script>
+
 document.addEventListener("DOMContentLoaded", function () {
 
     const form = document.getElementById("sidebarFilterForm");
 
     if (!form) return;
 
-    // TODOS OS SELECTS
     const selects = form.querySelectorAll("select");
 
     selects.forEach(select => {
 
         select.addEventListener("change", function () {
+
+            // 🔥 mantém sidebar aberto
+            localStorage.setItem("sidebarOpen", "true");
 
             form.submit();
 
@@ -127,34 +130,5 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 });
-</script>
-<script>
-document.addEventListener("DOMContentLoaded", function () {
 
-    const sidebar = document.querySelector(".sidebar");
-    const toggleBtn = document.querySelector(".toggle-btn");
-
-    if (!sidebar || !toggleBtn) return;
-
-    // Recupera estado salvo
-    const sidebarState = localStorage.getItem("sidebarCollapsed");
-
-    if (sidebarState === "true") {
-        sidebar.classList.add("collapsed");
-    }
-
-    // Alterna sidebar
-    toggleBtn.addEventListener("click", function () {
-
-        sidebar.classList.toggle("collapsed");
-
-        // Salva estado
-        localStorage.setItem(
-            "sidebarCollapsed",
-            sidebar.classList.contains("collapsed")
-        );
-
-    });
-
-});
 </script>
