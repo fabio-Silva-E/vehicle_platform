@@ -1,0 +1,245 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block header %}{% endblock %}
+{% block search %}{% endblock %}
+
+{% block content %}
+
+<div class="form-wrapper">
+
+    <div class="form-card-olx">
+
+        <h3 class="form-title">
+            {{ object|yesno:"Editar Venda,Criar venda" }}
+        </h3>
+
+        <form id="delete-image-form" method="post">
+            {% csrf_token %}
+        </form>
+
+        <form method="post" enctype="multipart/form-data">
+        <div class="form-grid">
+           {% csrf_token %}
+            <div style="display:none;">
+                {{ form.plan }}
+            </div>
+            <div class="full-width">
+                {% include "includes/plan_info.html" %}
+            </div>
+           <!-- CATEGORIA -->
+           <div>
+               <label>Categoria</label>
+               {{ form.category }}
+           </div>
+
+
+           <!-- CAMPOS VEÍCULO -->
+           <div id="vehicle-fields">
+
+               <div>
+                   <label>Modelo</label>
+                   {{ form.model }}
+               </div>
+
+               <div>
+                   <label>Fabricante</label>
+                   {{ form.manufacturer }}
+               </div>
+
+               <div>
+                   <label>Novo fabricante</label>
+                   {{ form.manufacturer_name }}
+               </div>
+
+               <div>
+                   <label>Ano</label>
+                   {{ form.year }}
+               </div>
+
+           </div>
+
+           <!-- SEMPRE VISÍVEL -->
+           <div>
+               <label>Valor</label>
+               {{ form.value }}
+           </div>
+
+           <div>
+               <label>Descrição</label>
+               {{ form.description }}
+           </div>
+
+           <div>
+               <label>WhatsApp</label>
+               {{ form.whatsapp }}
+           </div>
+
+        </div>
+
+            <!-- 🔥 IMAGENS EXISTENTES -->
+            {% if object %}
+            <div class="image-section">
+                <h5>Imagens do anúncio</h5>
+
+                <div class="image-grid">
+                    {% for image in object.images.all %}
+                        <div class="image-box">
+
+                            <img src="{{ image.image.url }}">
+
+                            <button type="submit"
+                                    form="delete-image-form"
+                                    formaction="{% url 'platform:image-delete' pk=image.id %}"
+                                    class="delete-btn">
+                                ✕
+                            </button>
+
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- 📤 UPLOAD -->
+            <!-- 📤 UPLOAD -->
+<div class="upload-box">
+    <input type="file" name="images" id="image-input" multiple>
+    <p>📸 Clique ou arraste imagens</p>
+</div>
+
+<div id="preview" class="image-grid"></div>
+
+<!-- BOTÃO -->
+<button type="submit" class="btn-submit">
+    🚀 Publicar anúncio
+</button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script>
+let selectedFiles = [];
+
+document.getElementById("image-input").addEventListener("change", function (event) {
+    const files = Array.from(event.target.files);
+
+    selectedFiles = selectedFiles.concat(files);
+    renderPreview();
+});
+
+function renderPreview() {
+    const preview = document.getElementById("preview");
+    preview.innerHTML = "";
+
+    selectedFiles.forEach((file, index) => {
+        if (!file.type.startsWith("image/")) return;
+
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+
+            const box = document.createElement("div");
+            box.className = "image-box"; // 🔥 usa seu CSS correto
+
+            box.innerHTML = `
+                <img src="${e.target.result}">
+
+                <button type="button"
+                        class="delete-btn"
+                        onclick="removeImage(${index})">
+                    ✕
+                </button>
+            `;
+
+            preview.appendChild(box);
+        };
+
+        reader.readAsDataURL(file);
+    });
+
+    updateInputFiles();
+}
+
+function removeImage(index) {
+    selectedFiles.splice(index, 1);
+    renderPreview();
+}
+
+function updateInputFiles() {
+    const dataTransfer = new DataTransfer();
+
+    selectedFiles.forEach(file => {
+        dataTransfer.items.add(file);
+    });
+
+    document.getElementById("image-input").files = dataTransfer.files;
+}
+</script>
+<script>
+function toggleVehicleFields() {
+
+    const category = document.getElementById("id_category").value;
+
+    const vehicleFields = document.getElementById("vehicle-fields");
+
+    if (category === "animal" || category === "fazenda") {
+
+        vehicleFields.style.display = "none";
+
+    } else {
+
+        vehicleFields.style.display = "contents";
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const categoryField = document.getElementById("id_category");
+
+    toggleVehicleFields();
+
+    categoryField.addEventListener("change", toggleVehicleFields);
+
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const cards = document.querySelectorAll(".plan-card");
+    const select = document.getElementById("id_plan");
+
+    function activateCard(value) {
+
+        cards.forEach(card => {
+
+            card.classList.remove("active");
+
+            if (card.dataset.plan === value) {
+                card.classList.add("active");
+            }
+        });
+    }
+
+    // clique nos cards
+    cards.forEach(card => {
+
+        card.addEventListener("click", function () {
+
+            const plan = this.dataset.plan;
+
+            select.value = plan;
+
+            activateCard(plan);
+        });
+    });
+
+    // inicia selecionado
+    activateCard(select.value);
+});
+</script>
+{% endblock %}

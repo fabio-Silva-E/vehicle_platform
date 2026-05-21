@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block header %}
+<div class="header-fixed">
+    <h2>Confirmar exclusão</h2>
+</div>
+{% endblock %}
+{% block search %}{% endblock %}
+
+{% block content %}
+
+
+
+<p>
+    Tem certeza que deseja excluir o anuncio:
+</p>
+
+<h4>{{ object.model }}</h4>
+
+<p><strong>Fabricante:</strong> {{ object.manufacturer.name }}</p>
+<p><strong>Ano:</strong> {{ object.year }}</p>
+
+<br>
+
+<form method="post">
+    {% csrf_token %}
+
+    <button type="submit" class="btn btn-danger">
+        🗑️ Sim, excluir
+    </button>
+
+    <a href="{% url 'platform:car-detail' object.id %}" class="btn btn-secondary">
+        Cancelar
+    </a>
+</form>
+
+{% endblock %}

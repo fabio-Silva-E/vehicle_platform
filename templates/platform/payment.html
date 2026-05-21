@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="payment-wrapper">
+
+    <div class="payment-card">
+
+        <div class="payment-header">
+
+            <div class="payment-icon">
+                💳
+            </div>
+
+            <h1>
+                Finalizar pagamento
+            </h1>
+
+            <p>
+                Seu anúncio está quase online
+            </p>
+
+        </div>
+
+        <div class="payment-plan">
+
+            <h3>
+                Plano selecionado
+            </h3>
+
+            <div class="plan-badge {{ object.plan }}">
+
+                {% if object.plan == "premium" %}
+                    ⭐ Premium
+                {% endif %}
+
+                {% if object.plan == "destaque" %}
+                    🔥 Destaque
+                {% endif %}
+
+            </div>
+
+        </div>
+
+        <div class="payment-info">
+
+            <div class="info-row">
+                <span>Plano</span>
+                <strong>{{ object.get_plan_display }}</strong>
+            </div>
+
+            <div class="info-row">
+                <span>Duração</span>
+
+                {% if object.plan == "premium" %}
+                    <strong>30 dias</strong>
+                {% endif %}
+
+                {% if object.plan == "destaque" %}
+                    <strong>60 dias</strong>
+                {% endif %}
+            </div>
+
+            <div class="info-row total">
+                <span>Total</span>
+
+                {% if object.plan == "premium" %}
+                    <strong>R$ 19,90</strong>
+                {% endif %}
+
+                {% if object.plan == "destaque" %}
+                    <strong>R$ 49,90</strong>
+                {% endif %}
+            </div>
+
+        </div>
+
+        <a href="#"
+           class="pay-btn">
+
+           🚀 Pagar agora
+
+        </a>
+
+        <div class="secure-info">
+            🔒 Pagamento 100% seguro
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

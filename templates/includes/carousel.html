@@ -1,0 +1,38 @@
+{% if car.images.all %}
+<div id="carCarousel" class="carousel slide mb-4" data-ride="carousel">
+
+    <!-- INDICADORES (bolinhas) -->
+    <ol class="carousel-indicators">
+        {% for image in car.images.all %}
+            <li data-target="#carCarousel"
+                data-slide-to="{{ forloop.counter0 }}"
+                class="{% if forloop.first %}active{% endif %}">
+            </li>
+        {% endfor %}
+    </ol>
+
+    <!-- IMAGENS -->
+    <div class="carousel-inner">
+        {% for image in car.images.all %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                <img src="{{ image.image.url }}"
+                     class="d-block w-100"
+                     style="height:400px; object-fit:contain; background:#000;">
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- SETA ESQUERDA -->
+    <a class="carousel-control-prev" href="#carCarousel" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+    </a>
+
+    <!-- SETA DIREITA -->
+    <a class="carousel-control-next" href="#carCarousel" role="button" data-slide="next">
+        <span class="carousel-control-next-icon"></span>
+    </a>
+
+</div>
+{% else %}
+<p>Sem imagens</p>
+{% endif %}

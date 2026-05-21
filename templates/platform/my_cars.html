@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h2 class="text-white mb-4">
+        📦 Meus anúncios
+    </h2>
+
+    {% if car_list %}
+
+        <div class="car-grid">
+
+            {% for car in car_list %}
+
+                {% include "includes/car_card.html" with car=car show_buttons=True show_image=True %}
+
+                <div class="mb-4">
+
+                    <a href="{% url 'platform:car-update' pk=car.id %}"
+                       class="btn btn-warning btn-sm">
+                        ✏️ Editar
+                    </a>
+
+                    <a href="{% url 'platform:car-delete' pk=car.id %}"
+                       class="btn btn-danger btn-sm">
+                        🗑️ Excluir
+                    </a>
+
+                    {% if car.is_active %}
+                        <span class="badge badge-success">
+                            Ativo
+                        </span>
+                    {% else %}
+                        <span class="badge badge-secondary">
+                            Expirado
+                        </span>
+                    {% endif %}
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <div class="alert alert-light">
+            Você ainda não possui anúncios.
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

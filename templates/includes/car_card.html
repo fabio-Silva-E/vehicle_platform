@@ -1,0 +1,73 @@
+<div class="car-item">
+
+    <!-- CARD SOMENTE IMAGEM -->
+    <div class="card card-3d car-card">
+
+        {% if show_image %}
+        <div class="card-image">
+
+            {% if car.images.first %}
+                {% if request.user == car.owner %}
+
+                <div class="plan-badge {{ car.plan }}">
+
+                    {% if car.plan == "premium" %}
+                        ⭐ Premium
+                    {% elif car.plan == "destaque" %}
+                        🔥 Destaque
+                    {% else %}
+                        ⭐ Básico
+                    {% endif %}
+
+                </div>
+
+                {% endif %}
+                <a href="{% url 'platform:car-detail' pk=car.id %}">
+                    <img src="{{ car.images.first.image.url }}">
+                </a>
+            {% else %}
+                <div class="no-image">
+                    Sem imagem
+                </div>
+            {% endif %}
+
+        </div>
+        {% endif %}
+
+    </div>
+
+    <!-- 🔥 INFORMAÇÕES FORA DO CARD -->
+    <div class="car-info-box">
+
+         <p><strong>Modelo:</strong> {{ car.model }}</p>
+
+            <p><strong>Fabricante:</strong> {{ car.manufacturer.name }}</p>
+
+            <p><strong>Ano:</strong> {{ car.year }}</p>
+            <p><strong>R$ :</strong> {{ car.value|floatformat:2 }}</p>
+            {% if show_description %}
+            <p>
+                {{ car.description }}
+            </p>
+            {% endif %}
+
+        <div class="card-buttons">
+
+            {% if show_buttons %}
+                <a href="{% url 'platform:car-detail' pk=car.id %}"
+                   class="btn btn-primary btn-sm w-100 mb-2">
+                    Ver detalhes
+                </a>
+            {% endif %}
+
+            <a href="https://wa.me/{{ car.whatsapp|cut:' '|cut:'('|cut:')'|cut:'-' }}"
+               target="_blank"
+               class="btn btn-success btn-sm w-100">
+                💬 WhatsApp
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
