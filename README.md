@@ -33,7 +33,7 @@ Sistema web desenvolvido com Django para publicação e gerenciamento de anúnci
 * Filtrar por modelo
 * Filtrar por ano
 
-##❤️ Favoritos
+## ❤️ Favoritos
 * Adicionar anúncios aos favoritos
 * Remover anúncios dos favoritos
 * Página exclusiva de favoritos
@@ -196,7 +196,7 @@ EMAIL_HOST_PASSWORD = "senha_de_app"
 
 * vendas
 
-##Favorite
+## Favorite
 * usuário
 * anúncio favorito
 * data de criação
