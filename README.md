@@ -196,7 +196,10 @@ EMAIL_HOST_PASSWORD = "senha_de_app"
 
 * vendas
 
-##
+##Favorite
+usuário
+anúncio favorito
+data de criação
 
 ---
 
