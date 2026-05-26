@@ -1,26 +1,38 @@
 from django.contrib import admin
-from .models import Car, CarImage, Manufacturer
-from django.contrib.auth import get_user_model
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
-User = get_user_model()
+from .models import (
+    User,
+    Manufacturer,
+    Car,
+    CarImage,
+    Listing,
+    Favorite,
+    Payment,
+    AdPlan
+)
 
 
 @admin.register(User)
-class UserAdmin(BaseUserAdmin):
-    list_display = ("username", "email", "phone", "city", "is_staff")
-
-    fieldsets = BaseUserAdmin.fieldsets + (
-        ("Informações adicionais", {
-            "fields": ("phone", "city"),
-        }),
+class UserAdmin(admin.ModelAdmin):
+    list_display = (
+        "username",
+        "email",
+        "cpf_cnpj",
+        "city",
+        "is_staff"
     )
 
-    add_fieldsets = BaseUserAdmin.add_fieldsets + (
-        ("Informações adicionais", {
-            "fields": ("phone", "city"),
-        }),
+    search_fields = (
+        "username",
+        "email",
+        "cpf_cnpj"
     )
+
+
+@admin.register(Manufacturer)
+class ManufacturerAdmin(admin.ModelAdmin):
+    search_fields = ("name",)
+
 
 class CarImageInline(admin.TabularInline):
     model = CarImage
@@ -29,24 +41,79 @@ class CarImageInline(admin.TabularInline):
 
 @admin.register(Car)
 class CarAdmin(admin.ModelAdmin):
-    list_display = ("model", "manufacturer", "year", "owner")
-    search_fields = ("model", "manufacturer__name")
-    list_filter = ("manufacturer", "year")
+
+    list_display = (
+        "model",
+        "category",
+        "plan",
+        "owner",
+        "value",
+        "is_paid",
+        "is_active",
+        "expires_at"
+    )
+
+    list_filter = (
+        "category",
+        "is_paid",
+        "is_active",
+        "plan"
+    )
+
+    search_fields = (
+        "model",
+        "owner__username"
+    )
+
     inlines = [CarImageInline]
 
 
-@admin.register(Manufacturer)
-class ManufacturerAdmin(admin.ModelAdmin):
-    search_fields = ("name",)
+@admin.register(AdPlan)
+class AdPlanAdmin(admin.ModelAdmin):
 
-from django.utils.html import format_html
+    list_display = (
+        "name",
+        "price",
+        "max_images",
+        "duration_days",
+        "priority"
+    )
 
-class CarImageInline(admin.TabularInline):
-    model = CarImage
-    extra = 1
-    readonly_fields = ("preview",)
 
-    def preview(self, obj):
-        if obj.image:
-            return format_html('<img src="{}" width="100" />', obj.image.url)
-        return ""
+@admin.register(Listing)
+class ListingAdmin(admin.ModelAdmin):
+
+    list_display = (
+        "car",
+        "type",
+        "price",
+        "is_available"
+    )
+
+
+@admin.register(Favorite)
+class FavoriteAdmin(admin.ModelAdmin):
+
+    list_display = (
+        "user",
+        "car",
+        "created_at"
+    )
+
+
+@admin.register(Payment)
+class PaymentAdmin(admin.ModelAdmin):
+
+    list_display = (
+        "car",
+        "payment_id",
+        "status",
+        "created_at"
+    )
+
+    list_filter = ("status",)
+
+    search_fields = (
+        "payment_id",
+        "car__model"
+    )

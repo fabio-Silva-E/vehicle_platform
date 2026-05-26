@@ -29,13 +29,30 @@
                     </a>
 
                     {% if car.is_active %}
+
                         <span class="badge badge-success">
-                            Ativo
+                            ✅ Ativo
                         </span>
+
+                    {% elif not car.is_paid %}
+
+                        <span class="badge badge-warning text-dark">
+                            ⏳ Aguardando pagamento
+                        </span>
+
+                        <div class="alert alert-warning mt-2 p-2">
+
+                            ⚠️ Este anúncio será removido automaticamente
+                            em 24 horas caso o pagamento não seja confirmado.
+
+                        </div>
+
                     {% else %}
+
                         <span class="badge badge-secondary">
-                            Expirado
+                            ❌ Expirado
                         </span>
+
                     {% endif %}
 
                 </div>

@@ -76,13 +76,8 @@
 }
 
 body {
-    background: linear-gradient(135deg, #f5f7fa, #e4e7eb);
-}
-/* 🌍 FONTE GLOBAL */
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 14px;
-    color: #333;
+    background: linear-gradient(135deg, #061b14, #0f3d2e);
+    color: white;
 }
 
 /* TÍTULOS */
@@ -95,7 +90,7 @@ h1, h2, h3, h4, h5 {
 p, strong {
     font-size: 14px;
     line-height: 1.5;
-    color: rgb(239 234 234 / 0.93);
+    color: rgb(2 9 39 / 0.93);
 }
 /* INPUTS PADRÃO */
 input,
@@ -213,4 +208,30 @@ img {
 
         grid-template-columns: 1fr !important;
     }
+}
+.search-bar {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+}
+
+.search-bar input {
+    flex: 1;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    outline: none;
+    background: #0c2a20;
+    color: white;
+}
+
+.search-bar button {
+    margin-left: 10px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    border: none;
+    background: #19c37d;
+    color: white;
+    cursor: pointer;
 }

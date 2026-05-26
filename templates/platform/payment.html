@@ -1,7 +1,33 @@
 {% extends "base.html" %}
 
 {% block content %}
+{% if payment_confirmed %}
 
+<div class="alert alert-success text-center mt-4">
+
+    <h3>✅ Pagamento confirmado!</h3>
+
+    <p>
+        Seu anúncio foi liberado com sucesso.
+    </p>
+
+    <p>
+        Redirecionando...
+    </p>
+
+</div>
+
+<script>
+
+    setTimeout(function() {
+
+        window.location.href = "/";
+
+    }, 3000);
+
+</script>
+
+{% endif %}
 <div class="payment-wrapper">
 
     <div class="payment-card">
@@ -28,13 +54,13 @@
                 Plano selecionado
             </h3>
 
-            <div class="plan-badge {{ object.plan }}">
+            <div class="plan-badge {{ object.plan.name }}">
 
-                {% if object.plan == "premium" %}
+                {% if object.plan.is_premium %}
                     ⭐ Premium
                 {% endif %}
 
-                {% if object.plan == "destaque" %}
+                {% if object.plan.is_destaque %}
                     🔥 Destaque
                 {% endif %}
 
@@ -46,41 +72,83 @@
 
             <div class="info-row">
                 <span>Plano</span>
-                <strong>{{ object.get_plan_display }}</strong>
+
+                <strong>
+                    {{ object.plan.get_name_display }}
+                </strong>
             </div>
 
             <div class="info-row">
                 <span>Duração</span>
 
-                {% if object.plan == "premium" %}
-                    <strong>30 dias</strong>
-                {% endif %}
-
-                {% if object.plan == "destaque" %}
-                    <strong>60 dias</strong>
-                {% endif %}
+                <strong>
+                    {{ object.plan.duration_days }} dias
+                </strong>
             </div>
 
             <div class="info-row total">
                 <span>Total</span>
 
-                {% if object.plan == "premium" %}
-                    <strong>R$ 19,90</strong>
-                {% endif %}
-
-                {% if object.plan == "destaque" %}
-                    <strong>R$ 49,90</strong>
-                {% endif %}
+                <strong>
+                    R$ {{ object.plan.price }}
+                </strong>
             </div>
 
         </div>
 
-        <a href="#"
-           class="pay-btn">
 
-           🚀 Pagar agora
+        <div class="pix-box mt-4">
 
-        </a>
+            <h3 class="mb-3">
+                📱 Pague com PIX
+            </h3>
+
+            <img
+                src="data:image/png;base64,{{ pix.encodedImage }}"
+                width="250"
+                class="img-fluid mb-3"
+            >
+
+            <textarea
+                 id="pixCode"
+                 class="form-control"
+                 rows="5"
+                 readonly>{{ pix.payload }}</textarea>
+
+       <div class="mt-3">
+
+           <div
+               id="copyMessage"
+               class="alert alert-success py-2 mb-2 d-none">
+
+               ✅ PIX copiado com sucesso!
+
+           </div>
+
+           <button
+               class="btn btn-success w-100"
+               onclick="copyPixCode()">
+
+               📋 Copiar PIX
+
+           </button>
+
+       </div>
+
+        </div>
+
+
+        {% if payment.invoiceUrl %}
+
+            <a href="{{ payment.invoiceUrl }}"
+               target="_blank"
+               class="pay-btn mt-4">
+
+               🚀 Abrir pagamento
+
+            </a>
+
+        {% endif %}
 
         <div class="secure-info">
             🔒 Pagamento 100% seguro
@@ -90,4 +158,58 @@
 
 </div>
 
+<script>
+
+function copyPixCode() {
+
+    const pixField = document.getElementById(
+        "pixCode"
+    );
+
+    const copyMessage = document.getElementById(
+        "copyMessage"
+    );
+
+    navigator.clipboard.writeText(
+        pixField.value
+    ).then(() => {
+
+        copyMessage.classList.remove("d-none");
+
+        setTimeout(() => {
+
+            copyMessage.classList.add("d-none");
+
+        }, 3000);
+
+    });
+
+}
+
+</script>
+<script>
+
+setInterval(function() {
+
+    fetch(window.location.href)
+
+        .then(response => response.text())
+
+        .then(html => {
+
+            if (
+                html.includes("Pagamento confirmado!")
+            ) {
+
+                document.open();
+                document.write(html);
+                document.close();
+
+            }
+
+        });
+
+}, 5000);
+
+</script>
 {% endblock %}
