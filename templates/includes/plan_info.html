@@ -1,46 +1,42 @@
 <div class="plans-wrapper">
 
-    <div class="plan-card basic"
-         data-plan="basico">
+    {% for plan in plans %}
 
-        <h4>🟢 Plano Básico</h4>
+        <div class="plan-card {{ plan.css_class }}"
+             data-plan="{{ plan.id }}">
 
-        <ul>
-            <li>Publicação imediata</li>
-            <li>Anúncio simples</li>
-            <li>4 fotos</li>
-            <li>7 dias no ar</li>
-            <li>Grátis</li>
-        </ul>
-    </div>
+            <h4>
+                {{ plan.badge }}
+            </h4>
 
-    <div class="plan-card premium"
-         data-plan="premium">
+            <ul>
 
-        <h4>⭐ Plano Premium</h4>
+                {% if plan.is_basico %}
+                    <li>Publicação imediata</li>
+                    <li>Anúncio simples</li>
+                {% endif %}
 
-        <ul>
-            <li>Destaque inicial</li>
-            <li>15 fotos</li>
-            <li>Maior visibilidade</li>
-            <li>30 dias</li>
-            <li>R$ 29,90</li>
-        </ul>
-    </div>
+                {% if plan.is_premium %}
+                    <li>Destaque inicial</li>
+                    <li>Maior visibilidade</li>
+                {% endif %}
 
-    <div class="plan-card destaque"
-         data-plan="destaque">
+                {% if plan.is_destaque %}
+                    <li>Topo da página</li>
+                    <li>Selo destaque</li>
+                    <li>Prioridade nas buscas</li>
+                {% endif %}
 
-        <h4>🔥 Plano Destaque</h4>
+                <li>{{ plan.max_images }} fotos</li>
 
-        <ul>
-            <li>Topo da página</li>
-            <li>Selo destaque</li>
-            <li>Prioridade nas buscas</li>
-            <li>30 fotos</li>
-            <li>60 dias</li>
-            <li>R$ 59,90</li>
-        </ul>
-    </div>
+                <li>{{ plan.duration_days }} dias no ar</li>
+
+                <li>{{ plan.formatted_price }}</li>
+
+            </ul>
+
+        </div>
+
+    {% endfor %}
 
 </div>

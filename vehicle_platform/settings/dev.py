@@ -1,9 +1,18 @@
 from .base import  *
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
+ASAAS_WEBHOOK_TOKEN = os.getenv("ASAAS_WEBHOOK_TOKEN")
+ASAAS_API_KEY = os.getenv("ASAAS_API_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DJANGO_DEBUG", "") != "False"
 
-ALLOWED_HOSTS =  ["127.0.0.1"]
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
+    ".ngrok-free.app",
+]
 
 
 # Database

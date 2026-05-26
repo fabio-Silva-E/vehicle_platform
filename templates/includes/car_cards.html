@@ -1,0 +1,15 @@
+<div class="car-grid">
+
+    {% for car in car_list %}
+
+        {% include "includes/car_card.html" with car=car show_buttons=True show_image=True %}
+
+    {% empty %}
+
+        <div class="no-results">
+            Nenhum anúncio encontrado.
+        </div>
+
+    {% endfor %}
+
+</div>

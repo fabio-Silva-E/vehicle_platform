@@ -5,11 +5,98 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.conf import settings
 
+class AdPlan(models.Model):
+
+    PLAN_CHOICES = [
+        ("basico", "Básico"),
+        ("premium", "Premium"),
+        ("destaque", "Destaque"),
+    ]
+
+    name = models.CharField(
+        "Plano",
+        max_length=20,
+        choices=PLAN_CHOICES,
+        unique=True
+    )
+
+    price = models.DecimalField(
+        "Preço",
+        max_digits=10,
+        decimal_places=2,
+        default=0
+    )
+
+    max_images = models.PositiveIntegerField(
+        "Máximo de imagens",
+        default=4
+    )
+
+    duration_days = models.PositiveIntegerField(
+        "Duração em dias",
+        default=7
+    )
+
+    priority = models.PositiveIntegerField(
+        "Prioridade",
+        default=3
+    )
+
+    class Meta:
+        verbose_name = "Plano de anúncio"
+        verbose_name_plural = "Planos de anúncios"
+        ordering = ["priority"]
+
+    # 🔥 TIPOS DE PLANO
+
+    def is_basico(self):
+        return self.name == "basico"
+
+    def is_premium(self):
+        return self.name == "premium"
+
+    def is_destaque(self):
+        return self.name == "destaque"
+
+    # 🔥 BADGE VISUAL
+
+    @property
+    def badge(self):
+
+        badges = {
+            "basico": "🟢 Básico",
+            "premium": "⭐ Premium",
+            "destaque": "🔥 Destaque",
+        }
+
+        return badges.get(
+            self.name,
+            self.get_name_display()
+        )
+
+    # 🔥 CSS CLASS
+
+    @property
+    def css_class(self):
+        return self.name
+
+    # 🔥 FORMATAÇÃO DE PREÇO
+
+    @property
+    def formatted_price(self):
+        return f"R$ {self.price:.2f}"
+
+    def __str__(self):
+        return self.get_name_display()
+
 
 class User(AbstractUser):
     phone = models.CharField(max_length=20, blank=True)
     city = models.CharField(max_length=100, blank=True)
-
+    cpf_cnpj = models.CharField(
+            max_length=18,
+            blank=True
+        )
     def __str__(self):
         return self.username
 
@@ -22,6 +109,7 @@ class Manufacturer(models.Model):
 
 
 class Car(models.Model):
+
     CATEGORY_CHOICES = [
         ("carro", "Carros"),
         ("equipamento", "Equipamentos Pesados"),
@@ -29,28 +117,32 @@ class Car(models.Model):
         ("fazenda", "Fazenda"),
         ("caminhao", "Caminhao"),
     ]
-    PLAN_CHOICES = [
-        ("basico", "Básico"),
-        ("premium", "Premium"),
-        ("destaque", "Destaque"),
-    ]
+
     category = models.CharField(
         "Categoria",
-        max_length=20,
+        max_length=255,
         choices=CATEGORY_CHOICES,
         default="carro"
     )
+
+    plan = models.ForeignKey(
+        "AdPlan",
+        on_delete=models.PROTECT,
+        related_name="cars"
+    )
+
     is_paid = models.BooleanField(default=False)
 
     expires_at = models.DateTimeField(null=True, blank=True)
 
     is_active = models.BooleanField(default=False)
-    plan = models.CharField(
-        max_length=20,
-        choices=PLAN_CHOICES,
-        default="basico"
+
+    model = models.CharField(
+        "Modelo",
+        max_length=255,
+        blank=True,
+        null=True
     )
-    model = models.CharField("Modelo", max_length=255, blank=True,  null=True)
 
     manufacturer = models.ForeignKey(
         "Manufacturer",
@@ -61,56 +153,46 @@ class Car(models.Model):
     )
 
     year = models.IntegerField("Ano", null=True, blank=True)
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name="Dono", on_delete=models.CASCADE)
 
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        verbose_name="Dono",
+        on_delete=models.CASCADE
+    )
 
     description = models.TextField("Descrição", blank=True)
+
     value = models.DecimalField(
         "Valor",
-        max_digits=10,
+        max_digits=15,
         decimal_places=2,
         default=0
     )
-    whatsapp = models.CharField("WhatsApp", max_length=20, blank=True)
+
+    whatsapp = models.CharField(
+        "WhatsApp",
+        max_length=20,
+        blank=True
+    )
 
     def max_images(self):
-
-        if self.plan == "basico":
-            return 4
-
-        elif self.plan == "premium":
-            return 15
-
-        elif self.plan == "destaque":
-            return 30
-
-        return 4
-
-    def is_premium(self):
-        return self.plan == "premium"
-
-    def is_destaque(self):
-        return self.plan == "destaque"
+        return self.plan.max_images
 
     def priority(self):
+        return self.plan.priority
 
-        if self.plan == "destaque":
-            return 1
+    def is_premium(self):
+        return self.plan.is_premium()
 
-        elif self.plan == "premium":
-            return 2
-
-        return 3
+    def is_destaque(self):
+        return self.plan.is_destaque()
 
     def set_expiration(self):
-        if self.plan == "basico":
-            self.expires_at = timezone.now() + timedelta(minutes=10)
-        elif self.plan == "premium":
-            self.expires_at = timezone.now() + timedelta(days=30)
-        elif self.plan == "destaque":
-            self.expires_at = timezone.now() + timedelta(days=60)
+        self.expires_at = (
+            timezone.now() +
+            timedelta(days=self.plan.duration_days)
+        )
 
-        return 4
     def __str__(self):
         return self.model
 
@@ -142,9 +224,62 @@ class Listing(models.Model):
 
 
 class Favorite(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    car = models.ForeignKey(Car, on_delete=models.CASCADE)
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+
+    car = models.ForeignKey(
+        Car,
+        on_delete=models.CASCADE,
+        related_name="favorites"
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         unique_together = ("user", "car")
+
+        verbose_name = "Ver Depois"
+        verbose_name_plural = "Ver Depois"
+
+    def __str__(self):
+        return f"{self.user} -> {self.car}"
+
+
+class Payment(models.Model):
+
+    STATUS_CHOICES = [
+        ("pending", "Pendente"),
+        ("paid", "Pago"),
+        ("expired", "Expirado"),
+    ]
+
+    car = models.OneToOneField(
+        Car,
+        on_delete=models.CASCADE
+    )
+
+    payment_id = models.CharField(
+        max_length=255
+    )
+
+    invoice_url = models.URLField()
+
+    pix_code = models.TextField()
+
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default="pending"
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+    paid_at = models.DateTimeField(
+        null=True,
+        blank=True
+    )
 
