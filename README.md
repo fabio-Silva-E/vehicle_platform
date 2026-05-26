@@ -34,11 +34,11 @@ Sistema web desenvolvido com Django para publicação e gerenciamento de anúnci
 * Filtrar por ano
 
 ##❤️ Favoritos
-Adicionar anúncios aos favoritos
-Remover anúncios dos favoritos
-Página exclusiva de favoritos
-Atualização em tempo real sem reload
-Sistema AJAX para favoritar/desfavoritar
+* Adicionar anúncios aos favoritos
+* Remover anúncios dos favoritos
+* Página exclusiva de favoritos
+* Atualização em tempo real sem reload
+* Sistema AJAX para favoritar/desfavoritar
 
 ## 💰 Listings
 
@@ -197,9 +197,9 @@ EMAIL_HOST_PASSWORD = "senha_de_app"
 * vendas
 
 ##Favorite
-usuário
-anúncio favorito
-data de criação
+* usuário
+* anúncio favorito
+* data de criação
 
 ---
 
