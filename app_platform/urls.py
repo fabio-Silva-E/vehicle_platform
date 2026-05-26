@@ -1,4 +1,5 @@
 from django.urls import path
+from .webhooks import asaas_webhook
 from django.contrib.auth import views as auth_views
 from .views import (CarListView,
                     RegisterView,
@@ -6,7 +7,8 @@ from .views import (CarListView,
                     CarUpdateView,
                     CarDeleteView,
                     CarDetailView,
-                    DeleteCarImageView, PaymentView, ApprovePaymentView, MyCarsView
+                    DeleteCarImageView, PaymentView, ApprovePaymentView, MyCarsView, FavoriteListView,
+                    ToggleFavoriteView,
                     )
 urlpatterns = [
     path("", CarListView.as_view(), name="car-list"),
@@ -34,6 +36,23 @@ urlpatterns = [
     path("login/", auth_views.LoginView.as_view(
         template_name="registration/login.html"
     ), name="login"),
+
+    path(
+        "favorites/",
+        FavoriteListView.as_view(),
+        name="favorite-list"
+    ),
+
+    path(
+        "favorite/<int:pk>/",
+        ToggleFavoriteView.as_view(),
+        name="toggle-favorite"
+    ),
+    path(
+        "webhooks/asaas/",
+        asaas_webhook,
+        name="asaas-webhook"
+    ),
     path('password-reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
     path('password-reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),

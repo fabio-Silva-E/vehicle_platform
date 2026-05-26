@@ -1,9 +1,12 @@
 from .base import  *
-
+from dotenv import load_dotenv
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
+load_dotenv()
+ASAAS_WEBHOOK_TOKEN = os.getenv("ASAAS_WEBHOOK_TOKEN")
 
-ALLOWED_HOSTS =  ["127.0.0.1", "localhost"]
+ASAAS_API_KEY = os.getenv("ASAAS_API_KEY")
+ALLOWED_HOSTS =  ["127.0.0.1", "localhost","terrier-equipped-supposedly.ngrok-free.app",]
 
 
 # Database

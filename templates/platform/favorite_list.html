@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2 class="text-white mb-4">
+    ❤️ Ver Depois
+</h2>
+
+<div class="car-grid">
+
+    {% for car in car_list %}
+
+        {% include "includes/car_card.html" with car=car show_buttons=True show_image=True is_favorite_page=True %}
+
+    {% empty %}
+
+        <p class="text-white">
+            Nenhum anúncio salvo.
+        </p>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}

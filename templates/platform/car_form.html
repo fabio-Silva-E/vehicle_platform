@@ -211,6 +211,7 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener("DOMContentLoaded", function () {
 
     const cards = document.querySelectorAll(".plan-card");
+
     const select = document.getElementById("id_plan");
 
     function activateCard(value) {
@@ -219,27 +220,31 @@ document.addEventListener("DOMContentLoaded", function () {
 
             card.classList.remove("active");
 
-            if (card.dataset.plan === value) {
+            // 🔥 compara corretamente com IDs
+            if (card.dataset.plan === String(value)) {
+
                 card.classList.add("active");
             }
         });
     }
 
-    // clique nos cards
+    // 🔥 clique nos cards
     cards.forEach(card => {
 
         card.addEventListener("click", function () {
 
-            const plan = this.dataset.plan;
+            const planId = this.dataset.plan;
 
-            select.value = plan;
+            // 🔥 altera select hidden
+            select.value = planId;
 
-            activateCard(plan);
+            activateCard(planId);
         });
     });
 
-    // inicia selecionado
+    // 🔥 inicia selecionado
     activateCard(select.value);
+
 });
 </script>
 {% endblock %}
