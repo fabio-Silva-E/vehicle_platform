@@ -4,9 +4,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 ASAAS_WEBHOOK_TOKEN = os.getenv("ASAAS_WEBHOOK_TOKEN")
-DEBUG = os.environ.get("DJANGO_DEBUG", "") != "False"
+DEBUG = True
 ASAAS_API_KEY = os.getenv("ASAAS_API_KEY")
-ALLOWED_HOSTS =  ["127.0.0.1", "localhost","terrier-equipped-supposedly.ngrok-free.app",]
+ALLOWED_HOSTS =  ["127.0.0.1", "localhost","terrier-equipped-supposedly.ngrok-free.app", "https://vehicle-platform.onrender.com/",]
 
 
 # Database
