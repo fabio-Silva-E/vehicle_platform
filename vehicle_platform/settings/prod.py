@@ -1,12 +1,17 @@
 from .base import  *
 from dotenv import load_dotenv
 # SECURITY WARNING: don't run with debug turned on in production!
-
+import dj_database_url
 load_dotenv()
 ASAAS_WEBHOOK_TOKEN = os.getenv("ASAAS_WEBHOOK_TOKEN")
 DEBUG = os.environ.get("DJANGO_DEBUG", "") != "False"
 ASAAS_API_KEY = os.getenv("ASAAS_API_KEY")
 ALLOWED_HOSTS =  ["127.0.0.1", "localhost","terrier-equipped-supposedly.ngrok-free.app", "https://vehicle-platform.onrender.com/",]
+DATABASES = {
+               'default': dj_database_url.parse(
+                   os.getenv("DATABASE_URL")
+               )
+           }
 
 
 # Database
