@@ -1,26 +1,20 @@
-from .models import Car, CarImage, Manufacturer, AdPlan
+import re
+
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
-import re
+
+from .models import AdPlan, Car, Manufacturer
 
 User = get_user_model()
-widget=forms.Select(attrs={
-    "class": "form-select form-select-sm"
-})
 
-widget=forms.TextInput(attrs={
-    "class": "form-control form-control-sm"
-})
 
 class UserRegisterForm(UserCreationForm):
 
     def clean_cpf_cnpj(self):
 
-        cpf_cnpj = self.cleaned_data.get(
-            "cpf_cnpj"
-        )
+        cpf_cnpj = self.cleaned_data.get("cpf_cnpj")
 
         if not cpf_cnpj:
             return cpf_cnpj
@@ -33,80 +27,48 @@ class UserRegisterForm(UserCreationForm):
 
             # bloqueia sequências iguais
             if cpf_cnpj == cpf_cnpj[0] * 11:
-                raise ValidationError(
-                    "CPF inválido."
-                )
+                raise ValidationError("CPF inválido.")
 
             # primeiro dígito
-            soma = sum(
-                int(cpf_cnpj[i]) * (10 - i)
-                for i in range(9)
-            )
+            soma = sum(int(cpf_cnpj[i]) * (10 - i) for i in range(9))
 
-            digito1 = (
-                              (soma * 10) % 11
-                      ) % 10
+            digito1 = ((soma * 10) % 11) % 10
 
             # segundo dígito
-            soma = sum(
-                int(cpf_cnpj[i]) * (11 - i)
-                for i in range(10)
-            )
+            soma = sum(int(cpf_cnpj[i]) * (11 - i) for i in range(10))
 
-            digito2 = (
-                              (soma * 10) % 11
-                      ) % 10
+            digito2 = ((soma * 10) % 11) % 10
 
-            if (
-                    int(cpf_cnpj[9]) != digito1 or
-                    int(cpf_cnpj[10]) != digito2
-            ):
-                raise ValidationError(
-                    "CPF inválido."
-                )
+            if int(cpf_cnpj[9]) != digito1 or int(cpf_cnpj[10]) != digito2:
+                raise ValidationError("CPF inválido.")
 
         # CNPJ
         elif len(cpf_cnpj) == 14:
 
             def calcular_digito(cnpj, pesos):
 
-                soma = sum(
-                    int(num) * peso
-                    for num, peso in zip(cnpj, pesos)
-                )
+                soma = sum(int(num) * peso for num, peso in zip(cnpj, pesos))
 
                 resto = soma % 11
 
                 return "0" if resto < 2 else str(11 - resto)
 
             if cpf_cnpj == cpf_cnpj[0] * 14:
-                raise ValidationError(
-                    "CNPJ inválido."
-                )
+                raise ValidationError("CNPJ inválido.")
 
             pesos1 = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]
             pesos2 = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]
 
-            digito1 = calcular_digito(
-                cpf_cnpj[:12],
-                pesos1
-            )
+            digito1 = calcular_digito(cpf_cnpj[:12], pesos1)
 
-            digito2 = calcular_digito(
-                cpf_cnpj[:12] + digito1,
-                pesos2
-            )
+            digito2 = calcular_digito(cpf_cnpj[:12] + digito1, pesos2)
 
             if cpf_cnpj[-2:] != digito1 + digito2:
-                raise ValidationError(
-                    "CNPJ inválido."
-                )
+                raise ValidationError("CNPJ inválido.")
 
         else:
 
-            raise ValidationError(
-                "Informe um CPF ou CNPJ válido."
-            )
+            raise ValidationError("Informe um CPF ou CNPJ válido.")
 
         return cpf_cnpj
 
@@ -121,7 +83,7 @@ class UserRegisterForm(UserCreationForm):
             "city",
             "cpf_cnpj",
             "password1",
-            "password2"
+            "password2",
         )
 
         labels = {
@@ -134,8 +96,8 @@ class UserRegisterForm(UserCreationForm):
             "password2": "Confirme a senha",
         }
 
-class CarSearchForm(forms.Form):
 
+class CarSearchForm(forms.Form):
     CATEGORY_CHOICES = [
         ("", "Todas"),
         ("carro", "Carros"),
@@ -145,150 +107,104 @@ class CarSearchForm(forms.Form):
     ]
 
     q = forms.CharField(
-
         max_length=255,
-
         required=False,
-
         label="",
-
-        widget=forms.TextInput(attrs={
-
-            "placeholder": "Buscar por modelo, fabricante ou palavra-chave...",
-
-            "class": "search-input",
-
-            "autocomplete": "off",
-        })
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Buscar por "
+                "modelo, fabricante ou palavra-chave...",
+                "class": "search-input",
+                "autocomplete": "off",
+            }),
     )
 
     category = forms.ChoiceField(
-
         required=False,
-
         label="Categoria",
-
         choices=[("", "Todos")] + Car.CATEGORY_CHOICES,
-
-        widget=forms.Select(attrs={
-
-            "class": "sidebar-select",
-
-          #  "onchange": "this.form.submit()"
-        })
+        widget=forms.Select(
+            attrs={
+                "class": "sidebar-select",
+                #  "onchange": "this.form.submit()"
+            }
+        ),
     )
 
     model = forms.ChoiceField(
-
         required=False,
-
         label="Modelo",
-
         choices=[],
-
-        widget=forms.Select(attrs={
-
-            "class": "sidebar-select",
-
-          #  "onchange": "this.form.submit()"
-        })
+        widget=forms.Select(
+            attrs={
+                "class": "sidebar-select",
+                #  "onchange": "this.form.submit()"
+            }
+        ),
     )
 
     manufacturer = forms.ChoiceField(
-
         required=False,
-
         label="Fabricante",
-
         choices=[],
-
-        widget=forms.Select(attrs={
-
-            "class": "sidebar-select",
-
-           # "onchange": "this.form.submit()"
-        })
+        widget=forms.Select(
+            attrs={
+                "class": "sidebar-select",
+                # "onchange": "this.form.submit()"
+            }
+        ),
     )
 
     year = forms.ChoiceField(
-
         required=False,
-
         label="Ano",
-
         choices=[],
-
-        widget=forms.Select(attrs={
-
-            "class": "sidebar-select",
-
-           # "onchange": "this.form.submit()"
-        })
+        widget=forms.Select(
+            attrs={
+                "class": "sidebar-select",
+                # "onchange": "this.form.submit()"
+            }
+        ),
     )
 
     def __init__(self, *args, **kwargs):
-
         super().__init__(*args, **kwargs)
 
         # MODELOS
-        models = Car.objects.values_list(
-            "model",
-            flat=True
-        ).distinct()
+        models = Car.objects.values_list("model", flat=True).distinct()
 
         self.fields["model"].choices = [
-            ("", "Todos")
-        ] + [(m, m) for m in models if m]
+            ("", "Todos")] + [(m, m) for m in models if m]
 
         # FABRICANTES
         manufacturers = Manufacturer.objects.all()
 
-        self.fields["manufacturer"].choices = [
-            ("", "Todos")
-        ] + [
-            (m.id, m.name)
-            for m in manufacturers
+        self.fields["manufacturer"].choices = [("", "Todos")] + [
+            (m.id, m.name) for m in manufacturers
         ]
 
         # ANOS
         years = Car.objects.values_list(
-            "year",
-            flat=True
-        ).distinct().order_by("-year")
+            "year", flat=True).distinct().order_by("-year")
 
-        self.fields["year"].choices = [
-            ("", "Todos")
-        ] + [
-            (y, y)
-            for y in years if y
-        ]
+        self.fields["year"].choices
+        [("", "Todos")] + [(y, y) for y in years if y]
+
+
 class CarForm(forms.ModelForm):
-
     manufacturer_name = forms.CharField(
-        required=False,
-        label="Novo fabricante"
-    )
+        required=False, label="Novo fabricante")
 
     plan = forms.ModelChoiceField(
-
         queryset=AdPlan.objects.all().order_by("priority"),
-
         label="Plano",
-
         empty_label=None,
-
-        widget=forms.Select(attrs={
-            "class": "form-select"
-        })
+        widget=forms.Select(attrs={"class": "form-select"}),
     )
 
     whatsapp = forms.CharField(
-
         label="WhatsApp",
-
-        widget=forms.TextInput(attrs={
-            "placeholder": "(99) 99999-9999"
-        })
+        widget=forms.TextInput(attrs={"placeholder": "(99) 99999-9999"}),
     )
 
     class Meta:
@@ -302,7 +218,7 @@ class CarForm(forms.ModelForm):
             "year",
             "value",
             "description",
-            "whatsapp"
+            "whatsapp",
         ]
 
         labels = {
@@ -351,14 +267,10 @@ class CarForm(forms.ModelForm):
         if category in ["carro", "equipamento", "caminhao"]:
 
             if not cleaned_data.get("model"):
-                raise forms.ValidationError(
-                    "Informe o modelo."
-                )
+                raise forms.ValidationError("Informe o modelo.")
 
             if not cleaned_data.get("year"):
-                raise forms.ValidationError(
-                    "Informe o ano."
-                )
+                raise forms.ValidationError("Informe o ano.")
 
             if not manufacturer and not manufacturer_name:
                 raise forms.ValidationError(
@@ -377,7 +289,6 @@ class CarForm(forms.ModelForm):
                 total_images += self.instance.images.count()
 
             if total_images > plan.max_images:
-
                 raise forms.ValidationError(
                     f"O plano {plan.get_name_display()} "
                     f"permite apenas {plan.max_images} imagens."
@@ -392,10 +303,8 @@ class CarForm(forms.ModelForm):
         manufacturer_name = self.cleaned_data.get("manufacturer_name")
 
         if manufacturer_name:
-
             manufacturer, _ = Manufacturer.objects.get_or_create(
-                name=manufacturer_name
-            )
+                name=manufacturer_name)
 
         self.instance.manufacturer = manufacturer
 

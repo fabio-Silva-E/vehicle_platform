@@ -1,11 +1,11 @@
-from decimal import Decimal
 import random
+from decimal import Decimal
 
-from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
 from django.core.files.base import ContentFile
+from django.core.management.base import BaseCommand
 
-from app_platform.models import Car, Manufacturer, AdPlan, CarImage
+from app_platform.models import AdPlan, Car, CarImage, Manufacturer
 
 
 class Command(BaseCommand):
@@ -22,9 +22,16 @@ class Command(BaseCommand):
             raise Exception("Nenhum usuário encontrado.")
 
         manufacturers_names = [
-            "Chevrolet", "Volkswagen", "Fiat", "Ford",
-            "Toyota", "Honda", "Hyundai", "BMW",
-            "Mercedes", "Audi",
+            "Chevrolet",
+            "Volkswagen",
+            "Fiat",
+            "Ford",
+            "Toyota",
+            "Honda",
+            "Hyundai",
+            "BMW",
+            "Mercedes",
+            "Audi",
         ]
 
         manufacturers = []
@@ -37,9 +44,21 @@ class Command(BaseCommand):
             raise Exception("Nenhum plano encontrado.")
 
         models = [
-            "Vectra", "Civic", "Corolla", "Gol", "Palio",
-            "Uno", "Cruze", "HB20", "Onix", "Fusion",
-            "Hilux", "S10", "Ranger", "Toro", "Compass",
+            "Vectra",
+            "Civic",
+            "Corolla",
+            "Gol",
+            "Palio",
+            "Uno",
+            "Cruze",
+            "HB20",
+            "Onix",
+            "Fusion",
+            "Hilux",
+            "S10",
+            "Ranger",
+            "Toro",
+            "Compass",
         ]
 
         categories = ["carro", "equipamento", "animal", "fazenda", "caminhao"]
@@ -74,15 +93,12 @@ class Command(BaseCommand):
                 CarImage.objects.create(
                     car=car,
                     image=ContentFile(
-                        image_content,
-                        f"car_{i}_{img_index}.jpg"
-                    )
+                        image_content, f"car_{i}_{img_index}.jpg"),
                 )
 
-            self.stdout.write(f"✅ {i+1} anúncios criados")
+            self.stdout.write(f"✅ {i + 1} anúncios criados")
 
         self.stdout.write(
             self.style.SUCCESS(
-                f"🔥 FINALIZADO: {TOTAL_ANUNCIOS} anúncios criados."
-            )
+                f"🔥 FINALIZADO:" f" {TOTAL_ANUNCIOS} anúncios criados.")
         )

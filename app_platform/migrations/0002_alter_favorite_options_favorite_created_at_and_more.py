@@ -8,23 +8,30 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('app_platform', '0001_initial'),
+        ("app_platform", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='favorite',
-            options={'verbose_name': 'Ver Depois', 'verbose_name_plural': 'Ver Depois'},
+            name="favorite",
+            options={"verbose_name": "Ver Depois",
+                     "verbose_name_plural": "Ver Depois"},
         ),
         migrations.AddField(
-            model_name='favorite',
-            name='created_at',
-            field=models.DateTimeField(auto_now_add=True, default=django.utils.timezone.now),
+            model_name="favorite",
+            name="created_at",
+            field=models.DateTimeField(
+                auto_now_add=True, default=django.utils.timezone.now
+            ),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='favorite',
-            name='car',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='favorites', to='app_platform.car'),
+            model_name="favorite",
+            name="car",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="favorites",
+                to="app_platform.car",
+            ),
         ),
     ]

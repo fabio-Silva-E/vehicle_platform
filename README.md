@@ -1,4 +1,4 @@
-﻿# vehicle_platform
+﻿﻿# vehicle_platform
 # 🚗 Site Veículos - Marketplace Django
 
 Sistema web desenvolvido com Django para publicação e gerenciamento de anúncios de veículos, caminhões, equipamentos pesados, fazendas e animais.

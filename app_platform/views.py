@@ -1,21 +1,20 @@
 from django.contrib.auth import login
-from django.urls import reverse_lazy
-from django.db.models import Q
-from django.shortcuts import render, redirect, get_object_or_404
-from .forms import UserRegisterForm, CarForm,  CarSearchForm
-from .models import Car, CarImage, Favorite
-from django.utils import timezone
-from django.views import generic,View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import AdPlan, Payment
+from django.db.models import Q
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.template.loader import render_to_string
+from django.urls import reverse_lazy
+from django.utils import timezone
+from django.views import View, generic
+
+from .forms import CarForm, CarSearchForm, UserRegisterForm
+from .models import AdPlan, Car, CarImage, Favorite, Payment
 from .services.asaas_service import AsaasService
 from .utils import delete_expired_unpaid_ads
-from django.template.loader import render_to_string
-from django.http import JsonResponse
 
 
-
-class CarListView( generic.ListView):
+class CarListView(generic.ListView):
     model = Car
     template_name = "platform/car_list.html"
     context_object_name = "car_list"
@@ -24,17 +23,15 @@ class CarListView( generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context["search_form"] = CarSearchForm(
-            self.request.GET or None
-        )
+        context["search_form"] = CarSearchForm(self.request.GET or None)
         context["show_filters"] = True
 
         # 🔥 favoritos do usuário
         if self.request.user.is_authenticated:
 
             favorites_ids = Favorite.objects.filter(
-                user=self.request.user
-            ).values_list("car_id", flat=True)
+                user=self.request.user).values_list(
+                "car_id", flat=True)
 
             context["favorite_ids"] = list(favorites_ids)
 
@@ -51,35 +48,24 @@ class CarListView( generic.ListView):
         # 🔥 AJAX
         if self.request.headers.get("x-requested-with") == "XMLHttpRequest":
             html = render_to_string(
-                "includes/car_cards.html",
-                context,
-                request=self.request
+                "includes/car_cards.html", context, request=self.request
             )
 
-            return JsonResponse({
-                "html": html
-            })
+            return JsonResponse({"html": html})
 
-        return super().render_to_response(
-            context,
-            **response_kwargs
-        )
+        return super().render_to_response(context, **response_kwargs)
+
     def get_queryset(self):
         delete_expired_unpaid_ads()
         Car.objects.filter(
             expires_at__lt=timezone.now(),
-            is_active=True
-        ).update(is_active=False)
+            is_active=True).update(
+            is_active=False)
 
-        queryset = Car.objects.filter(
-            is_active=True
-        ).select_related(
-            "plan",
-            "manufacturer",
-            "owner"
-        ).order_by(
-            "plan__priority",
-            "-id"
+        queryset = (
+            Car.objects.filter(is_active=True)
+            .select_related("plan", "manufacturer", "owner")
+            .order_by("plan__priority", "-id")
         )
 
         form = CarSearchForm(self.request.GET)
@@ -94,17 +80,14 @@ class CarListView( generic.ListView):
 
             if q:
                 queryset = queryset.filter(
-                    Q(model__icontains=q) |
-                    Q(manufacturer__name__icontains=q)
+                    Q(model__icontains=q) | Q(manufacturer__name__icontains=q)
                 )
 
             if model:
                 queryset = queryset.filter(model=model)
 
             if manufacturer:
-                queryset = queryset.filter(
-                    manufacturer__id=manufacturer
-                )
+                queryset = queryset.filter(manufacturer__id=manufacturer)
 
             if year:
                 queryset = queryset.filter(year=year)
@@ -113,6 +96,7 @@ class CarListView( generic.ListView):
                 queryset = queryset.filter(category=category)
 
         return queryset
+
 
 class RegisterView(generic.CreateView):
     form_class = UserRegisterForm
@@ -128,7 +112,7 @@ class RegisterView(generic.CreateView):
         return response
 
 
-class CarDetailView( generic.DetailView):
+class CarDetailView(generic.DetailView):
     model = Car
     template_name = "platform/car_detail.html"
 
@@ -163,28 +147,24 @@ class CarUpdateView(LoginRequiredMixin, generic.UpdateView):
 
         response = super().form_valid(form)
 
-        delete_ids = self.request.POST.getlist(
-            "delete_images"
-        )
+        delete_ids = self.request.POST.getlist("delete_images")
 
         if delete_ids:
-            CarImage.objects.filter(
-                id__in=delete_ids
-            ).delete()
+            CarImage.objects.filter(id__in=delete_ids).delete()
 
         images = self.request.FILES.getlist("images")
 
         for img in images:
-            CarImage.objects.create(
-                car=self.object,
-                image=img
-            )
+            CarImage.objects.create(car=self.object, image=img)
 
         return response
+
+
 class CarDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Car
     template_name = "platform/car_confirm_delete.html"
     success_url = reverse_lazy("platform:my-cars")
+
 
 class CarCreateView(LoginRequiredMixin, View):
 
@@ -194,18 +174,18 @@ class CarCreateView(LoginRequiredMixin, View):
 
         plans = AdPlan.objects.all()
 
-        return render(request, "platform/car_form.html", {
-            "form": form,
-            "plans": plans,
-        })
+        return render(
+            request,
+            "platform/car_form.html",
+            {
+                "form": form,
+                "plans": plans,
+            },
+        )
 
     def post(self, request):
 
-        form = CarForm(
-            request.POST,
-            request.FILES,
-            request=request
-        )
+        form = CarForm(request.POST, request.FILES, request=request)
 
         if form.is_valid():
 
@@ -230,24 +210,21 @@ class CarCreateView(LoginRequiredMixin, View):
             images = request.FILES.getlist("images")
 
             for img in images:
-                CarImage.objects.create(
-                    car=car,
-                    image=img
-                )
+                CarImage.objects.create(car=car, image=img)
 
             if not car.plan.is_basico():
-                return redirect(
-                    "platform:payment",
-                    pk=car.id
-                )
+                return redirect("platform:payment", pk=car.id)
 
             return redirect("platform:car-list")
 
-        return render(request, "platform/car_form.html", {
-            "form": form,
-            "plans": AdPlan.objects.all(),
-        })
-
+        return render(
+            request,
+            "platform/car_form.html",
+            {
+                "form": form,
+                "plans": AdPlan.objects.all(),
+            },
+        )
 
 
 class DeleteCarImageView(LoginRequiredMixin, View):
@@ -264,6 +241,8 @@ class DeleteCarImageView(LoginRequiredMixin, View):
         image.delete()
 
         return redirect("platform:car-update", pk=car_id)
+
+
 class PaymentView(LoginRequiredMixin, generic.DetailView):
 
     model = Car
@@ -274,31 +253,24 @@ class PaymentView(LoginRequiredMixin, generic.DetailView):
 
         context = super().get_context_data(**kwargs)
 
-        payment = Payment.objects.filter(
-            car=self.object
-        ).first()
+        payment = Payment.objects.filter(car=self.object).first()
 
         if payment:
 
-
-            payment_data = AsaasService.get_payment(
-                payment.payment_id
-            )
+            payment_data = AsaasService.get_payment(payment.payment_id)
 
             status_asaas = payment_data.get("status")
-
 
             # STATUSS ACEITOS
             payment_confirmed = status_asaas in [
                 "RECEIVED",
                 "RECEIVED_IN_CASH",
-                "CONFIRMED"
+                "CONFIRMED",
             ]
 
             if payment_confirmed:
 
                 if payment.status != "paid":
-
 
                     payment.status = "paid"
 
@@ -317,39 +289,31 @@ class PaymentView(LoginRequiredMixin, generic.DetailView):
 
                 context["payment_confirmed"] = True
 
-            pix_data = {
-                "payload": payment.pix_code
-            }
+            pix_data = {"payload": payment.pix_code}
 
         else:
 
-            payment_response = AsaasService.create_pix_payment(
-                self.object
-            )
+            payment_response = AsaasService.create_pix_payment(self.object)
 
             payment_data = payment_response["payment"]
 
             pix_data = payment_response["pix"]
 
             payment = Payment.objects.create(
-
                 car=self.object,
-
                 payment_id=payment_data["id"],
-
                 invoice_url=payment_data["invoiceUrl"],
-
                 pix_code=pix_data["payload"],
-
-                status="pending"
+                status="pending",
             )
-
 
         context["payment"] = payment_data
 
         context["pix"] = pix_data
 
         return context
+
+
 class ApprovePaymentView(LoginRequiredMixin, View):
 
     def get(self, request, pk):
@@ -364,6 +328,7 @@ class ApprovePaymentView(LoginRequiredMixin, View):
 
         return redirect("platform:car-list")
 
+
 class MyCarsView(LoginRequiredMixin, generic.ListView):
 
     model = Car
@@ -376,12 +341,72 @@ class MyCarsView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
 
-        return Car.objects.filter(
+        queryset = Car.objects.filter(
             owner=self.request.user
-        ).order_by("-id")
+        )
 
+        form = CarSearchForm(self.request.GET)
 
-from django.http import JsonResponse
+        if form.is_valid():
+
+            q = form.cleaned_data.get("q")
+            manufacturer = form.cleaned_data.get("manufacturer")
+            model = form.cleaned_data.get("model")
+            year = form.cleaned_data.get("year")
+            category = form.cleaned_data.get("category")
+
+            if q:
+                queryset = queryset.filter(
+                    Q(model__icontains=q) |
+                    Q(manufacturer__name__icontains=q)
+                )
+
+            if manufacturer:
+                queryset = queryset.filter(
+                    manufacturer=manufacturer
+                )
+
+            if model:
+                queryset = queryset.filter(model=model)
+
+            if year:
+                queryset = queryset.filter(year=year)
+
+            if category:
+                queryset = queryset.filter(category=category)
+
+        return queryset.order_by("-id")
+
+    def render_to_response(self, context, **response_kwargs):
+
+        if self.request.headers.get(
+                "x-requested-with"
+        ) == "XMLHttpRequest":
+            html = render_to_string(
+                "includes/my_car_cards.html",
+                context,
+                request=self.request
+            )
+
+            return JsonResponse({
+                "html": html
+            })
+
+        return super().render_to_response(
+            context,
+            **response_kwargs
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context["search_form"] = CarSearchForm(
+            self.request.GET or None
+        )
+
+        context["show_filters"] = True
+
+        return context
 
 
 class ToggleFavoriteView(LoginRequiredMixin, View):
@@ -391,9 +416,7 @@ class ToggleFavoriteView(LoginRequiredMixin, View):
         car = get_object_or_404(Car, pk=pk)
 
         favorite, created = Favorite.objects.get_or_create(
-            user=request.user,
-            car=car
-        )
+            user=request.user, car=car)
 
         is_favorite = True
 
@@ -404,11 +427,10 @@ class ToggleFavoriteView(LoginRequiredMixin, View):
 
             is_favorite = False
 
-        return JsonResponse({
-            "success": True,
-            "is_favorite": is_favorite,
-            "car_id": car.id
-        })
+        return JsonResponse(
+            {"success": True, "is_favorite": is_favorite, "car_id": car.id}
+        )
+
 
 class FavoriteListView(LoginRequiredMixin, generic.ListView):
 
@@ -422,16 +444,56 @@ class FavoriteListView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
 
-        return Car.objects.filter(
+        queryset = Car.objects.filter(
             favorites__user=self.request.user
         ).select_related(
             "manufacturer",
             "plan",
             "owner"
-        ).distinct().order_by("-favorites__created_at")
+        ).distinct()
+
+        form = CarSearchForm(self.request.GET)
+
+        if form.is_valid():
+
+            q = form.cleaned_data.get("q")
+            manufacturer = form.cleaned_data.get("manufacturer")
+            model = form.cleaned_data.get("model")
+            year = form.cleaned_data.get("year")
+            category = form.cleaned_data.get("category")
+
+            if q:
+                queryset = queryset.filter(
+                    Q(model__icontains=q) |
+                    Q(manufacturer__name__icontains=q)
+                )
+
+            if manufacturer:
+                queryset = queryset.filter(
+                    manufacturer=manufacturer
+                )
+
+            if model:
+                queryset = queryset.filter(model=model)
+
+            if year:
+                queryset = queryset.filter(year=year)
+
+            if category:
+                queryset = queryset.filter(category=category)
+
+        return queryset.order_by(
+            "-favorites__created_at"
+        )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        context["search_form"] = CarSearchForm(
+            self.request.GET or None
+        )
+
+        context["show_filters"] = True
 
         favorites_ids = Favorite.objects.filter(
             user=self.request.user
@@ -439,7 +501,27 @@ class FavoriteListView(LoginRequiredMixin, generic.ListView):
 
         context["favorite_ids"] = list(favorites_ids)
 
-        # 🔥 informa que é página favoritos
         context["is_favorite_page"] = True
 
         return context
+
+    def render_to_response(self, context, **response_kwargs):
+
+        if self.request.headers.get(
+            "x-requested-with"
+        ) == "XMLHttpRequest":
+
+            html = render_to_string(
+                "includes/car_cards.html",
+                context,
+                request=self.request
+            )
+
+            return JsonResponse({
+                "html": html
+            })
+
+        return super().render_to_response(
+            context,
+            **response_kwargs
+        )

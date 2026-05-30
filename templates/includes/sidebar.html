@@ -20,90 +20,111 @@
 
         {% else %}
 
-            <a href="{% url 'login'%}?next={{request.path}}"
+            <a href="{% url 'login' %}?next={{ request.path }}"
                class="btn btn-sm btn-light w-100">
-               Login
+                Login
             </a>
 
         {% endif %}
 
     </div>
 
-    <!-- 📌 MENU -->
-    <div class="sidebar-menu mt-4">
+    <div class="sidebar-container">
 
-   <a href="/" class="sidebar-link">
-    <span>🏠</span>
-    <span>Início</span>
-</a>
+        <!-- MENU RÁPIDO -->
+        <div class="sidebar-menu">
 
-<a href="{% url 'platform:my-cars' %}" class="sidebar-link">
-    <span>📦</span>
-    <span>Meus anúncios</span>
-</a>
+            <a href="/" class="sidebar-link">
+                <i class="bi bi-house"></i>
+                <span>Início</span>
+            </a>
 
-<a href="{% url 'platform:favorite-list' %}" class="sidebar-link">
-    <span>❤️</span>
-    <span>Ver depois</span>
-</a>
-    <!-- 🔍 FILTROS -->
-    {% if show_filters %}
-    <div class="sidebar-filter mt-4">
+            <a href="{% url 'platform:my-cars' %}"
+               class="sidebar-link">
+                <i class="bi bi-grid"></i>
+                <span>Meus anúncios</span>
+            </a>
 
-        <form method="get"
-              action="{% url 'platform:car-list' %}"
-              id="sidebarFilterForm">
-             <div class="mb-3">
-            <label>Categoria</label>
-            {{ search_form.category }}
+            <a href="{% url 'platform:favorite-list' %}"
+               class="sidebar-link">
+                <i class="bi bi-heart"></i>
+                <span>Ver depois</span>
+            </a>
+
         </div>
-            <div class="mb-3">
-                <label>Modelo</label>
-                {{ search_form.model }}
+
+        <!-- TOPO FILTROS -->
+        <div class="sidebar-header">
+
+            <h6>FILTROS</h6>
+
+            <a href="{% url 'platform:car-list' %}"
+               class="clear-filters">
+                ↻ Limpar filtros
+            </a>
+
+        </div>
+        <!-- FILTROS -->
+        {% if show_filters %}
+            <div class="sidebar-filter">
+
+                <form method="get"
+                      action="{% url 'platform:car-list' %}"
+                      id="sidebarFilterForm">
+
+                    <div class="filter-group">
+                        <label>Categoria</label>
+                        {{ search_form.category }}
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Modelo</label>
+                        {{ search_form.model }}
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Fabricante</label>
+                        {{ search_form.manufacturer }}
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Ano</label>
+                        {{ search_form.year }}
+                    </div>
+
+                </form>
+
+            </div>
+        {% endif %}
+
+        <!-- CARD ANÚNCIO -->
+        <div class="promo-card">
+
+            <div class="promo-icon">
+                <i class="bi bi-megaphone"></i>
             </div>
 
-            <div class="mb-3">
-                <label>Fabricante</label>
-                {{ search_form.manufacturer }}
-            </div>
+            <h5>Anuncie seu veículo</h5>
 
-            <div class="mb-3">
-                <label>Ano</label>
-                {{ search_form.year }}
-            </div>
+            <p>
+                Divulgue para milhares de potenciais compradores.
+            </p>
 
+            <a href="https://wa.me/5514997652839"
+               target="_blank"
+               class="btn-whatsapp">
+                <i class="bi bi-whatsapp"></i>
+                Falar no WhatsApp
+            </a>
 
-        </form>
+            <a href="mailto:fs27106@gmail.com"
+               class="btn-email">
+                <i class="bi bi-envelope"></i>
+                Enviar por E-mail
+            </a>
+
+        </div>
 
     </div>
-    {% endif %}
-    <!-- 📢 ANÚNCIOS -->
-<div class="sidebar-ads mt-4">
-
-    <div class="ads-box">
-
-        <h5 class="ads-title">
-            📢 Anuncie Aqui
-        </h5>
-
-        <p class="ads-text">
-            Divulgue sua empresa, fazenda,
-            caminhões, máquinas ou serviços.
-        </p>
-
-        <a href="https://wa.me/5514997652839"
-           target="_blank"
-           class="btn btn-success w-100 mb-2">
-            💬 WhatsApp
-        </a>
-
-        <a href="mailto:fs27106@gmail.com"
-           class="btn btn-outline-light w-100">
-            ✉️ Email
-        </a>
-
-    </div>
-
 </div>
-</div>
-</div>
+
