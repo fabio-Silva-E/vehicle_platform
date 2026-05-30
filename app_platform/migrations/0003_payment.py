@@ -7,20 +7,44 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('app_platform', '0002_alter_favorite_options_favorite_created_at_and_more'),
-    ]
+        ("app_platform", "0002_alter_favorite_options_favorite_created_at_and_more"), ]
 
     operations = [
         migrations.CreateModel(
-            name='Payment',
+            name="Payment",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('payment_id', models.CharField(max_length=255)),
-                ('invoice_url', models.URLField()),
-                ('pix_code', models.TextField()),
-                ('status', models.CharField(choices=[('pending', 'Pendente'), ('paid', 'Pago'), ('expired', 'Expirado')], default='pending', max_length=20)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('car', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='app_platform.car')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("payment_id", models.CharField(max_length=255)),
+                ("invoice_url", models.URLField()),
+                ("pix_code", models.TextField()),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[
+                            ("pending", "Pendente"),
+                            ("paid", "Pago"),
+                            ("expired", "Expirado"),
+                        ],
+                        default="pending",
+                        max_length=20,
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "car",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="app_platform.car",
+                    ),
+                ),
             ],
         ),
     ]

@@ -1,44 +1,56 @@
-/* GRID */
+/* =========================================
+   GRID
+========================================= */
+
 .car-grid {
+
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
+
+    grid-template-columns: repeat(4, minmax(260px, 1fr));
+
+    gap: 16px;
+
+    margin-top: 80px; /* ajuste aqui */
 }
 
-/* ITEM */
-.car-item {
+/* =========================================
+   CARD
+========================================= */
 
-    display: flex;
-
-    flex-direction: column;
-}
-
-/* CARD */
 .car-card {
-    border-radius: 16px;
+
+    background: linear-gradient(
+        180deg,
+        #0d2133 0%,
+        #081522 100%
+    );
+
+    border: 1px solid rgba(255,255,255,.06);
+
+    border-radius: 14px;
+
     overflow: hidden;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.08);
-    display: flex;
-    flex-direction: column;
+
+    transition: all .25s ease;
 }
 
 .car-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+
+    transform: translateY(-6px);
+
+    box-shadow:
+        0 20px 40px rgba(0,0,0,.35);
 }
-/* IMAGEM TOPO */
+
+/* =========================================
+   IMAGEM
+========================================= */
+
 .card-image {
+
     position: relative;
-}
 
-
-/* IMAGEM */
-.card-image {
-
-    width: 100%;
-
-    height: 260px;
+    height: 220px;
 
     overflow: hidden;
 
@@ -51,139 +63,261 @@
 
     height: 100%;
 
-    object-fit: fill;
+    object-fit: cover;
 
     display: block;
 }
-/* INFORMAÇÕES ABAIXO */
-/* INFO */
-.car-info-box {
-    padding: 14px;
-}
 
+/* =========================================
+   BADGE
+========================================= */
 
-/* TÍTULO */
-.car-title {
-    font-size: 16px;
+.plan-badge {
+
+    position: absolute;
+
+    top: 10px;
+    left: 10px;
+
+    z-index: 5;
+
+    background: #22c55e;
+
+    color: white;
+
+    padding: 4px 10px;
+
+    border-radius: 8px;
+
+    font-size: 11px;
+
     font-weight: 700;
-    color: #fff;
-    margin-bottom: 4px;
 }
 
-/* TEXTO */
-.car-info {
-    font-size: 13px;
-    color: rgba(255,255,255,0.7);
+/* =========================================
+   FAVORITO
+========================================= */
+
+.favorite-form {
+
+    position: absolute;
+
+    top: 10px;
+    right: 10px;
+
+    z-index: 5;
 }
 
+.favorite-btn {
 
-/* BOTÕES */
-.card-buttons {
-    margin-top: 10px;
+    width: 34px;
+
+    height: 34px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: rgba(0,0,0,.45);
+
+    color: white;
+
+    cursor: pointer;
+
+    backdrop-filter: blur(6px);
+}
+
+/* =========================================
+   INFO
+========================================= */
+
+.car-info-box {
+
+    padding: 15px;
+}
+
+.car-title {
+
+    color: white;
+
+    font-size: 22px;
+
+    font-weight: 700;
+
+    margin-bottom: 10px;
+}
+
+.car-meta {
+
     display: flex;
+
+    gap: 14px;
+
+    flex-wrap: wrap;
+
+    margin-bottom: 14px;
+
+    color: rgba(255,255,255,.65);
+
+    font-size: 12px;
+}
+
+.car-meta i {
+
+    margin-right: 4px;
+}
+
+/* =========================================
+   PREÇO
+========================================= */
+
+.car-price {
+
+    color: #22c55e;
+
+    font-size: 32px;
+
+    font-weight: 700;
+
+    margin-bottom: 16px;
+}
+
+/* =========================================
+   BOTÕES
+========================================= */
+
+.card-buttons {
+
+    display: flex;
+
     flex-direction: column;
+
     gap: 8px;
 }
-/* EFEITO */
-.card-3d:hover {
 
-    transform:
-        translateY(-8px)
-        scale(1.02);
+.btn-details {
 
-    box-shadow:
-        0 20px 40px rgba(0,0,0,0.3);
+    width: 100%;
+
+    text-align: center;
+
+    padding: 11px;
+
+    border-radius: 8px;
+
+    border: 1px solid #1ecb70;
+
+    color: white;
+
+    text-decoration: none;
+
+    font-weight: 600;
+
+    background: transparent;
 }
 
-/* MOBILE */
+.btn-details:hover {
+
+    color: white;
+
+    text-decoration: none;
+
+    background: rgba(30,203,112,.08);
+}
+
+.btn-whatsapp-card {
+
+    width: 100%;
+
+    text-align: center;
+
+    padding: 11px;
+
+    border-radius: 8px;
+
+    border: 1px solid #1ecb70;
+
+    color: #1ecb70;
+
+    text-decoration: none;
+
+    font-weight: 600;
+
+    background: transparent;
+}
+
+.btn-whatsapp-card:hover {
+
+    color: #22c55e;
+
+    text-decoration: none;
+
+    background: rgba(34,197,94,.08);
+}
+
+/* =========================================
+   RESPONSIVO
+========================================= */
+
 @media (max-width: 1200px) {
-    .car-grid { grid-template-columns: repeat(3, 1fr); }
+
+    .car-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
 @media (max-width: 992px) {
-    .car-grid { grid-template-columns: repeat(2, 1fr); }
+
+    .car-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 @media (max-width: 768px) {
-    .car-grid { grid-template-columns: 1fr; }
-}
-/* BADGE DO PLANO */
-.plan-badge {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    z-index: 2;
-}
-/* DESTAQUE */
-.plan-badge.destaque {
-    background: #ff3b3b;
-    color: white;
-}
-/* BÁSICO */
-.plan-badge.basico {
 
-    background: rgba(108, 117, 125, 0.9);
+    .car-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
-/* PREMIUM */
-.plan-badge.premium {
+.my-car-wrapper {
 
-    background: rgba(255, 193, 7, 0.95);
+    display: flex;
 
-    color: #222;
-}
+    flex-direction: column;
 
-.car-price {
-    font-size: 18px;
-    font-weight: bold;
-    color: #19c37d;
-    margin-top: 6px;
-}
-.btn-outline-light {
-    border: 1px solid rgba(255,255,255,0.3);
-    background: transparent;
-    color: white;
+    gap: 12px;
 }
 
-.btn-outline-light:hover {
-    background: rgba(255,255,255,0.1);
+.my-car-actions {
+
+    display: flex;
+
+    gap: 8px;
+
+    justify-content: center;
 }
-/* FAVORITO */
-.favorite-form {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    z-index: 2;
-}
-.favorite-btn {
-    background: rgba(0,0,0,0.5);
-    border: none;
-    color: white;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    cursor: pointer;
-    backdrop-filter: blur(6px);
-}
-.content-area {
+
+.my-car-actions .btn {
 
     flex: 1;
-
-    padding-top: 80px;
-
-    padding-left: 20px;
-
-    padding-right: 20px;
 }
-.car-card {
 
-    transition:
-        transform 0.25s ease,
-        box-shadow 0.25s ease;
+.my-car-status {
+
+    text-align: center;
 }
-.car-card {
 
-    transition:
-        transform 0.25s ease,
-        box-shadow 0.25s ease;
+.my-car-status .badge {
+
+    font-size: 13px;
+
+    padding: 8px 12px;
+}
+
+.my-car-status .alert {
+
+    font-size: 13px;
+
+    margin-bottom: 0;
 }

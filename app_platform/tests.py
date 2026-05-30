@@ -1,5 +1,6 @@
-from django.test import TestCase
 from django.contrib.auth import get_user_model
+from django.test import TestCase
+
 from .models import Car, Manufacturer
 
 
@@ -9,10 +10,7 @@ class CarTest(TestCase):
         manufacturer = Manufacturer.objects.create(name="BMW", country="DE")
 
         car = Car.objects.create(
-            model="X5",
-            manufacturer=manufacturer,
-            owner=user,
-            year=2022
+            model="X5", manufacturer=manufacturer, owner=user, year=2022
         )
 
         self.assertEqual(str(car), "X5")

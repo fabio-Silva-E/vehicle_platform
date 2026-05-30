@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('app_platform', '0004_user_cpf_cnpj'),
+        ("app_platform", "0004_user_cpf_cnpj"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='payment',
-            name='paid_at',
+            model_name="payment",
+            name="paid_at",
             field=models.DateTimeField(blank=True, null=True),
         ),
     ]

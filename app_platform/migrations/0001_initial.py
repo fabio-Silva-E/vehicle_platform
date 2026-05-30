@@ -9,111 +9,382 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('auth', '0012_alter_user_first_name_max_length'),
+        ("auth", "0012_alter_user_first_name_max_length"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='AdPlan',
+            name="AdPlan",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(choices=[('basico', 'Básico'), ('premium', 'Premium'), ('destaque', 'Destaque')], max_length=20, unique=True, verbose_name='Plano')),
-                ('price', models.DecimalField(decimal_places=2, default=0, max_digits=10, verbose_name='Preço')),
-                ('max_images', models.PositiveIntegerField(default=4, verbose_name='Máximo de imagens')),
-                ('duration_days', models.PositiveIntegerField(default=7, verbose_name='Duração em dias')),
-                ('priority', models.PositiveIntegerField(default=3, verbose_name='Prioridade')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        choices=[
+                            ("basico", "Básico"),
+                            ("premium", "Premium"),
+                            ("destaque", "Destaque"),
+                        ],
+                        max_length=20,
+                        unique=True,
+                        verbose_name="Plano",
+                    ),
+                ),
+                (
+                    "price",
+                    models.DecimalField(
+                        decimal_places=2, default=0, max_digits=10, verbose_name="Preço"
+                    ),
+                ),
+                (
+                    "max_images",
+                    models.PositiveIntegerField(
+                        default=4, verbose_name="Máximo de imagens"
+                    ),
+                ),
+                (
+                    "duration_days",
+                    models.PositiveIntegerField(
+                        default=7, verbose_name="Duração em dias"
+                    ),
+                ),
+                (
+                    "priority",
+                    models.PositiveIntegerField(
+                        default=3, verbose_name="Prioridade"),
+                ),
             ],
             options={
-                'verbose_name': 'Plano de anúncio',
-                'verbose_name_plural': 'Planos de anúncios',
-                'ordering': ['priority'],
+                "verbose_name": "Plano de anúncio",
+                "verbose_name_plural": "Planos de anúncios",
+                "ordering": ["priority"],
             },
         ),
         migrations.CreateModel(
-            name='Manufacturer',
+            name="Manufacturer",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=255)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=255)),
             ],
         ),
         migrations.CreateModel(
-            name='User',
+            name="User",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('password', models.CharField(max_length=128, verbose_name='password')),
-                ('last_login', models.DateTimeField(blank=True, null=True, verbose_name='last login')),
-                ('is_superuser', models.BooleanField(default=False, help_text='Designates that this user has all permissions without explicitly assigning them.', verbose_name='superuser status')),
-                ('username', models.CharField(error_messages={'unique': 'A user with that username already exists.'}, help_text='Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.', max_length=150, unique=True, validators=[django.contrib.auth.validators.UnicodeUsernameValidator()], verbose_name='username')),
-                ('first_name', models.CharField(blank=True, max_length=150, verbose_name='first name')),
-                ('last_name', models.CharField(blank=True, max_length=150, verbose_name='last name')),
-                ('email', models.EmailField(blank=True, max_length=254, verbose_name='email address')),
-                ('is_staff', models.BooleanField(default=False, help_text='Designates whether the user can log into this admin site.', verbose_name='staff status')),
-                ('is_active', models.BooleanField(default=True, help_text='Designates whether this user should be treated as active. Unselect this instead of deleting accounts.', verbose_name='active')),
-                ('date_joined', models.DateTimeField(default=django.utils.timezone.now, verbose_name='date joined')),
-                ('phone', models.CharField(blank=True, max_length=20)),
-                ('city', models.CharField(blank=True, max_length=100)),
-                ('groups', models.ManyToManyField(blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.', related_name='user_set', related_query_name='user', to='auth.group', verbose_name='groups')),
-                ('user_permissions', models.ManyToManyField(blank=True, help_text='Specific permissions for this user.', related_name='user_set', related_query_name='user', to='auth.permission', verbose_name='user permissions')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("password", models.CharField(
+                    max_length=128, verbose_name="password")),
+                (
+                    "last_login",
+                    models.DateTimeField(
+                        blank=True, null=True, verbose_name="last login"
+                    ),
+                ),
+                (
+                    "is_superuser",
+                    models.BooleanField(
+                        default=False,
+                        help_text="Designates that this user has "
+                        "all permissions without explicitly assigning them.",
+                        verbose_name="superuser status",
+                    ),
+                ),
+                (
+                    "username",
+                    models.CharField(
+                        error_messages={
+                            "unique": "A user with that username already exists."
+                        },
+                        help_text="Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.",
+                        max_length=150,
+                        unique=True,
+                        validators=[
+                            django.contrib.auth.validators.UnicodeUsernameValidator()
+                        ],
+                        verbose_name="username",
+                    ),
+                ),
+                (
+                    "first_name",
+                    models.CharField(
+                        blank=True, max_length=150, verbose_name="first name"
+                    ),
+                ),
+                (
+                    "last_name",
+                    models.CharField(
+                        blank=True, max_length=150, verbose_name="last name"
+                    ),
+                ),
+                (
+                    "email",
+                    models.EmailField(
+                        blank=True, max_length=254, verbose_name="email address"
+                    ),
+                ),
+                (
+                    "is_staff",
+                    models.BooleanField(
+                        default=False,
+                        help_text="Designates whether the user can log into this admin site.",
+                        verbose_name="staff status",
+                    ),
+                ),
+                (
+                    "is_active",
+                    models.BooleanField(
+                        default=True,
+                        help_text="Designates whether this user should be treated as active. Unselect this instead of deleting accounts.",
+                        verbose_name="active",
+                    ),
+                ),
+                (
+                    "date_joined",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now, verbose_name="date joined"
+                    ),
+                ),
+                ("phone", models.CharField(blank=True, max_length=20)),
+                ("city", models.CharField(blank=True, max_length=100)),
+                (
+                    "groups",
+                    models.ManyToManyField(
+                        blank=True,
+                        help_text="The groups this user belongs to. A user will get all permissions granted to each of their groups.",
+                        related_name="user_set",
+                        related_query_name="user",
+                        to="auth.group",
+                        verbose_name="groups",
+                    ),
+                ),
+                (
+                    "user_permissions",
+                    models.ManyToManyField(
+                        blank=True,
+                        help_text="Specific permissions for this user.",
+                        related_name="user_set",
+                        related_query_name="user",
+                        to="auth.permission",
+                        verbose_name="user permissions",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'user',
-                'verbose_name_plural': 'users',
-                'abstract': False,
+                "verbose_name": "user",
+                "verbose_name_plural": "users",
+                "abstract": False,
             },
             managers=[
-                ('objects', django.contrib.auth.models.UserManager()),
+                ("objects", django.contrib.auth.models.UserManager()),
             ],
         ),
         migrations.CreateModel(
-            name='Car',
+            name="Car",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('category', models.CharField(choices=[('carro', 'Carros'), ('equipamento', 'Equipamentos Pesados'), ('animal', 'Animais'), ('fazenda', 'Fazenda'), ('caminhao', 'Caminhao')], default='carro', max_length=255, verbose_name='Categoria')),
-                ('is_paid', models.BooleanField(default=False)),
-                ('expires_at', models.DateTimeField(blank=True, null=True)),
-                ('is_active', models.BooleanField(default=False)),
-                ('model', models.CharField(blank=True, max_length=255, null=True, verbose_name='Modelo')),
-                ('year', models.IntegerField(blank=True, null=True, verbose_name='Ano')),
-                ('description', models.TextField(blank=True, verbose_name='Descrição')),
-                ('value', models.DecimalField(decimal_places=2, default=0, max_digits=10, verbose_name='Valor')),
-                ('whatsapp', models.CharField(blank=True, max_length=20, verbose_name='WhatsApp')),
-                ('owner', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='Dono')),
-                ('plan', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='cars', to='app_platform.adplan')),
-                ('manufacturer', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='app_platform.manufacturer', verbose_name='Fabricante')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "category",
+                    models.CharField(
+                        choices=[
+                            ("carro", "Carros"),
+                            ("equipamento", "Equipamentos Pesados"),
+                            ("animal", "Animais"),
+                            ("fazenda", "Fazenda"),
+                            ("caminhao", "Caminhao"),
+                        ],
+                        default="carro",
+                        max_length=255,
+                        verbose_name="Categoria",
+                    ),
+                ),
+                ("is_paid", models.BooleanField(default=False)),
+                ("expires_at", models.DateTimeField(blank=True, null=True)),
+                ("is_active", models.BooleanField(default=False)),
+                (
+                    "model",
+                    models.CharField(
+                        blank=True, max_length=255, null=True, verbose_name="Modelo"
+                    ),
+                ),
+                (
+                    "year",
+                    models.IntegerField(
+                        blank=True, null=True, verbose_name="Ano"),
+                ),
+                ("description", models.TextField(
+                    blank=True, verbose_name="Descrição")),
+                (
+                    "value",
+                    models.DecimalField(
+                        decimal_places=2, default=0, max_digits=10, verbose_name="Valor"
+                    ),
+                ),
+                (
+                    "whatsapp",
+                    models.CharField(
+                        blank=True, max_length=20, verbose_name="WhatsApp"
+                    ),
+                ),
+                (
+                    "owner",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                        verbose_name="Dono",
+                    ),
+                ),
+                (
+                    "plan",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="cars",
+                        to="app_platform.adplan",
+                    ),
+                ),
+                (
+                    "manufacturer",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="app_platform.manufacturer",
+                        verbose_name="Fabricante",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='CarImage',
+            name="CarImage",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('image', models.ImageField(upload_to='cars/')),
-                ('car', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='images', to='app_platform.car')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("image", models.ImageField(upload_to="cars/")),
+                (
+                    "car",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="images",
+                        to="app_platform.car",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Listing',
+            name="Listing",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('type', models.CharField(choices=[('sale', 'Venda'), ('rent', 'Aluguel')], max_length=10, verbose_name='Tipo')),
-                ('price', models.DecimalField(decimal_places=2, max_digits=10, verbose_name='Preço')),
-                ('is_available', models.BooleanField(default=True, verbose_name='Disponível')),
-                ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='Criado em')),
-                ('car', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='app_platform.car', verbose_name='Carro')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "type",
+                    models.CharField(
+                        choices=[("sale", "Venda"), ("rent", "Aluguel")],
+                        max_length=10,
+                        verbose_name="Tipo",
+                    ),
+                ),
+                (
+                    "price",
+                    models.DecimalField(
+                        decimal_places=2, max_digits=10, verbose_name="Preço"
+                    ),
+                ),
+                (
+                    "is_available",
+                    models.BooleanField(
+                        default=True, verbose_name="Disponível"),
+                ),
+                (
+                    "created_at",
+                    models.DateTimeField(
+                        auto_now_add=True, verbose_name="Criado em"),
+                ),
+                (
+                    "car",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="app_platform.car",
+                        verbose_name="Carro",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Favorite',
+            name="Favorite",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('car', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='app_platform.car')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "car",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="app_platform.car",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'unique_together': {('user', 'car')},
+                "unique_together": {("user", "car")},
             },
         ),
     ]

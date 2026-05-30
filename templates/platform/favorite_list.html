@@ -6,19 +6,9 @@
     ❤️ Ver Depois
 </h2>
 
-<div class="car-grid">
+<div id="carsContainer">
 
-    {% for car in car_list %}
-
-        {% include "includes/car_card.html" with car=car show_buttons=True show_image=True is_favorite_page=True %}
-
-    {% empty %}
-
-        <p class="text-white">
-            Nenhum anúncio salvo.
-        </p>
-
-    {% endfor %}
+    {% include "includes/car_cards.html" %}
 
 </div>
 

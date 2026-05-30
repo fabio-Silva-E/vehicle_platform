@@ -8,34 +8,34 @@
 
 {% block content %}
 
-<!-- 🔥 CARROSSEL -->
-{% include "includes/carousel.html" %}
+    <!-- 🔥 CARROSSEL -->
+    {% include "includes/carousel.html" %}
 
-<!-- 🔥 INFORMAÇÕES -->
-<div class="mt-4">
+    <!-- 🔥 INFORMAÇÕES -->
+    <div class="mt-4">
 
-    {% include "includes/car_card.html" with car=car show_image=False show_description=True show_buttons=False %}
+        {% include "includes/car_card.html" with car=car show_image=False show_description=True show_buttons=False %}
 
-</div>
+    </div>
 
-{% if user == car.owner %}
-<div class="mb-3 mt-3">
+    {% if user == car.owner %}
+        <div class="mb-3 mt-3">
 
-    <a href="{% url 'platform:car-update' pk=car.id %}"
-       class="btn btn-secondary">
-        Editar
-    </a>
+            <a href="{% url 'platform:car-update' pk=car.id %}"
+               class="btn btn-secondary">
+                Editar
+            </a>
 
-    <a href="{% url 'platform:car-delete' pk=car.id %}"
-       class="btn btn-danger">
-        Excluir
-    </a>
+            <a href="{% url 'platform:car-delete' pk=car.id %}"
+               class="btn btn-danger">
+                Excluir
+            </a>
 
-</div>
-{% endif %}
+        </div>
+    {% endif %}
 
-<div class="mt-3 mb-3">
-    <p><strong>Vendedor:</strong> {{ car.owner.username }}</p>
-</div>
+    <div class="mt-3 mb-3">
+        <p><strong>Vendedor:</strong> {{ car.owner.username }}</p>
+    </div>
 
 {% endblock %}

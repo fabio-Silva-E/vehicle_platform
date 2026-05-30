@@ -1,39 +1,39 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 
-{% block sidebar %}{% endblock %}
+{% block sidebar_area %}{% endblock %}
 {% block header %}{% endblock %}
 {% block search %}{% endblock %}
 {% block body_class %}{% endblock %}
 {% block content %}
 
-<div class="form-wrapper">
+    <div class="form-wrapper">
 
-    <div class="form-card-olx auth-card">
+        <div class="form-card-olx auth-card">
 
-        <h3 class="form-title text-center">Criar conta</h3>
+            <h3 class="form-title text-center">Criar conta</h3>
 
-        <form method="post">
-            {% csrf_token %}
+            <form method="post">
+                {% csrf_token %}
 
-            {{ form|crispy }}
+                {{ form|crispy }}
 
-            <button type="submit" class="btn-submit">
-                🚀 Cadastrar
-            </button>
-        </form>
+                <button type="submit" class="btn-submit">
+                    🚀 Cadastrar
+                </button>
+            </form>
 
-        <hr>
+            <hr>
 
-        <p class="text-center mt-3">
-            Já tem conta?<br>
-            <a href="{% url 'login' %}" class="btn btn-outline-primary btn-sm mt-2">
-                Fazer login
-            </a>
-        </p>
+            <p class="text-center mt-3">
+                Já tem conta?<br>
+                <a href="{% url 'login' %}" class="btn btn-outline-primary btn-sm mt-2">
+                    Fazer login
+                </a>
+            </p>
+
+        </div>
 
     </div>
-
-</div>
 
 {% endblock %}

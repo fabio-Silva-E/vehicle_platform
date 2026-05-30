@@ -90,7 +90,7 @@ h1, h2, h3, h4, h5 {
 p, strong {
     font-size: 14px;
     line-height: 1.5;
-    color: rgb(2 9 39 / 0.93);
+    color: rgb(255 255 255);
 }
 /* INPUTS PADRÃO */
 input,
@@ -119,7 +119,13 @@ label {
     margin-top: 8px;
 }
 body {
-    background: #0F5A37; /* cinza claro moderno */
+background:
+        linear-gradient(
+            180deg,
+            #053020,
+            #093624
+        );
+
 }
 html, body {
     height: 100%;
@@ -127,10 +133,7 @@ html, body {
     padding: 0;
     overflow-x: hidden;
 }
-#layout {
-    display: flex;
-    min-height: 100vh;
-}
+
 /* RESET GLOBAL */
 * {
     box-sizing: border-box;
@@ -144,11 +147,9 @@ html, body {
 
 /* CONTAINER PRINCIPAL */
 #layout {
-
     display: flex;
-
+    align-items: flex-start;
     min-height: 100vh;
-
     width: 100%;
 }
 
